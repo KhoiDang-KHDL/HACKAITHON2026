@@ -1,0 +1,1612 @@
+\documentclass[13pt,a4paper]{extarticle}
+
+% --- Tiếng Việt ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% --- Lề trang & font ---
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{newtxtext,newtxmath}
+
+% --- Giãn dòng ---
+\usepackage{setspace}
+\setstretch{1.15}
+
+% --- Gói tiện ích thường dùng ---
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue
+}
+
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[labelfont=bf]{caption} % Hỗ trợ in đậm cho các chỉ mục Bảng, Hình
+
+% Đánh số đến tận level 4
+\setcounter{secnumdepth}{4}
+
+% Cập nhật tên các danh mục (nếu cần)
+\addto\captionsvietnamese{
+  \renewcommand{\contentsname}{Mục lục}
+  \renewcommand{\listfigurename}{Danh sách hình vẽ}
+  \renewcommand{\listtablename}{Danh sách bảng}
+}
+
+% Section: I., II., III.
+\renewcommand{\thesection}{\Roman{section}.}
+
+% Subsection: 1., 2., 3.
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+
+% Subsubsection: 1.1., 1.2.
+\renewcommand{\thesubsubsection}{\arabic{subsection}.\arabic{subsubsection}.}
+
+% Subsubsubsection: 1.1.1, 1.1.2,...
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand{\thesubsubsubsection}{%
+  \arabic{subsection}.\arabic{subsubsection}.\arabic{subsubsubsection}}
+
+\newcommand{\subsubsubsection}[1]{%
+  \refstepcounter{subsubsubsection}%
+  \par\medskip
+  \noindent\textbf{\thesubsubsubsection\ #1}\par\nopagebreak\medskip
+}
+\usepackage{pifont}
+% Định nghĩa ký tự Unicode cho dấu tick và dấu chéo
+\DeclareUnicodeCharacter{2714}{\ding{51}} % ✔
+\DeclareUnicodeCharacter{2718}{\ding{55}} % ✘
+
+\begin{document}
+
+%-------------------------
+% Trang tiêu đề
+%-------------------------
+\begin{titlepage}
+    \centering
+
+    {\Large VIETNAMESE STUDENT HACKAITHON 2026\par}
+
+    \vfill
+    
+    \includegraphics[width=0.75\textwidth]{hackaithon_logo.PNG} % Chỉnh width to nhỏ tùy ý
+    \vspace{1cm}
+
+    {\LARGE Đội: \textbf{NÓN LÁ}\par}
+    \vspace{1.5cm}
+
+    {\large \textbf{Thành viên thực hiện:}\par}
+    \vspace{1cm}
+
+    \large
+    \begin{tabular}{l l}
+        Hồ Lê Na & Trường Đại học Khoa học tự nhiên - ĐHQG TP.HCM \\
+        Huỳnh Nguyễn Thế Hiển  & Trường Đại học Khoa học tự nhiên - ĐHQG TP.HCM \\
+        Nguyễn Văn Minh & Trường Đại học Khoa học tự nhiên - ĐHQG TP.HCM \\
+        Nguyễn Đăng Khôi & Trường Đại học Công nghệ Thông tin - ĐHQG TP.HCM \\
+        Nguyễn Trần Tuấn Khôi & Trường Đại học Công nghệ Thông tin - ĐHQG TP.HCM \\
+    \end{tabular}
+
+    \vfill
+
+    {\Large Ngày 11 tháng 6 năm 2026\par}
+
+\end{titlepage}
+
+\setcounter{page}{1}
+
+\tableofcontents
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Danh sách hình vẽ}
+\listoffigures
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Danh sách bảng}
+\listoftables
+
+\newpage
+
+%=========================
+\section{BÀI TOÁN VÀ CƠ HỘI}
+%=========================
+
+\subsection{Bối cảnh và vấn đề thực tiễn}
+
+Ngành Fintech Việt Nam hiện nay đang bị kẹt trong một nghịch lý: sự dư thừa về thanh khoản nhưng lại thiếu hụt về tác động thực chất. Một bên là hệ sinh thái 13.368 sản phẩm OCOP đạt từ 3 sao trở lên – một nguồn lực khổng lồ được đầu tư bài bản nhưng đang đình trệ vì thiếu dòng tiền có cấu trúc. Bên kia là 20,4 triệu người dùng ngân hàng số dưới 35 tuổi – nhóm khách hàng đang tiết kiệm định kỳ nhưng hoàn toàn mất kết nối cảm xúc với dòng tiền của chính mình. Sự đứt gãy này không phải là những lỗ hổng đơn lẻ, mà là sự thiếu hụt một vòng lặp tài chính khép kín (Circular Finance). Trong bối cảnh các tiêu chuẩn Basel IV và IFC đang buộc các ngân hàng phải tăng tỷ trọng danh mục tài chính xanh, việc dòng tiền tiết kiệm của người trẻ "chảy qua" hệ thống mà không tạo ra giá trị ESG (Environmental, Social, and Governance) là một sự lãng phí chiến lược.
+
+Vì vậy, việc tái cấu trúc hệ sinh thái tài chính tuần hoàn không chỉ là yêu cầu cấp thiết của ngành Fintech, mà còn phản ánh những thách thức sâu sắc trong hành vi tài chính của thế hệ trẻ – nhóm khách hàng trung tâm của chuyển đổi số. Ba thách thức dưới đây thể hiện rõ những "điểm nghẽn" cần được nhận diện và giải quyết để hướng tới một mô hình tài chính tuần hoàn bền vững.
+
+
+\subsubsection{Thách thức của người trẻ trong quản lý tài chính}
+
+Người trẻ Việt Nam (18--35 tuổi) là nhóm tiếp cận nhanh với công nghệ tài chính. Tuy nhiên, số hóa chưa đồng nghĩa với gắn kết: họ có app, họ dùng app, nhưng mức độ gắn bó còn hạn chế.
+
+\begin{itemize}
+    \item \textbf{Phân tán trong sử dụng ứng dụng:} 80,7\% người dùng trong khảo sát cài 2--3 app ngân hàng nhưng chỉ thực sự dùng 1 app cho giao dịch chính. Các app còn lại chỉ được mở khi có nhắc chuyển tiền theo yêu cầu của đối tác hoặc bạn bè.
+
+    \item \textbf{Tiết kiệm theo cảm hứng, không theo kế hoạch:} 68,8\% người dùng trong khảo sát không có hạn mức tiết kiệm cố định hàng tháng hoặc chưa có thói quen tiết kiệm định kỳ; chỉ 31,2\% có mục tiêu rõ ràng. Bên cạnh đó, 58,7\% chưa bao giờ sử dụng tính năng Goal Saving trên app, phản ánh khoảng trống UX lớn về công cụ hỗ trợ thói quen tài chính.
+
+    \item \textbf{Cashback và ưu đãi số không khớp với nhu cầu thực tế:} 87,3\% trong khảo sát cho biết chỉ sử dụng dưới 50\% hoặc để hết hạn voucher cashback mà không dùng. Ba lý do hàng đầu: không phù hợp nhu cầu (56,9\%), điều kiện đổi thưởng phức tạp (48,6\%) và quên mất (42,2\%).
+
+    \item \textbf{``Mất kết nối cảm xúc'' với tiền:} 62,4\% người dùng đồng ý hoàn toàn hoặc một phần với nhận định ``tiết kiệm nhưng không biết tiền mình đang làm gì'' -- tỷ lệ này tăng lên 79,2\% ở nhóm 23--35 tuổi. Khi tiền không có câu chuyện, người dùng không có lý do tình cảm để trung thành với bất kỳ ngân hàng nào.
+\end{itemize}
+
+\textit{Nguồn: Khảo sát nhóm trên 109 người dùng 18--35 tuổi tại TP.HCM, Hà Nội và các tỉnh khác (05--10/06/2026, Google Form ẩn danh, phân tầng theo tuổi và thu nhập). Dữ liệu đầy đủ tại \hyperref[phulucA]{Phụ lục A}.}
+
+\subsubsection{Thách thức của ngân hàng số trong thu hút và giữ chân khách hàng}
+
+Tính đến Quý I/2026, Việt Nam có 49 ngân hàng hoạt động, trong đó khoảng 5 ngân hàng số thuần túy cùng tranh thị phần nhóm 18--35 tuổi. Kết quả là một cuộc chạy đua về đáy (race-to-the-bottom) mà không ai thắng:
+
+\begin{itemize}
+    \item \textbf{Chi phí hậu mãi lãng phí sâu:} Cashback, miễn phí, lãi suất ưu đãi tạo lưu lượng ban đầu nhưng không tạo gắn bó. Đối thủ có thể sao chép chiến lược này trong vài tuần.
+
+    \item \textbf{Loyalty thực sự thấp:} Theo Nielsen Vietnam (2024), chỉ 34\% người dùng ngân hàng số dưới 35 tuổi khẳng định sẽ không đổi ngân hàng dù có ưu đãi tốt hơn -- thấp hơn so với 61\% ở nhóm 45+.
+
+    \item \textbf{DAU chững lại sau 3 tháng đầu:} Thiếu lý do để mở app hàng ngày ngoài giao dịch. App ngân hàng trở thành tiện ích, không trở thành định danh thương hiệu.
+
+    \item \textbf{Khoảng trống ESG:} Nhóm khách hàng trẻ ưu tiên thương hiệu có giá trị xã hội, nhưng chưa có ngân hàng nào biến tác động ESG thành trải nghiệm cá nhân hóa, có thể đo được cho từng người dùng. Đáng chú ý, 78,9\% người tham gia khảo sát cho biết họ sẽ gắn kết hơn với ứng dụng nếu biết tiền của mình đang tài trợ cho một dự án cụ thể.
+\end{itemize}
+
+\subsubsection{Thách thức của hệ sinh thái OCOP}
+
+Sau gần 7 năm triển khai chương trình OCOP quốc gia (2018--2024), Việt Nam đã có 13.368 sản phẩm đạt chứng nhận. Tuy nhiên, ngân sách sàng lọc chất lượng đã được đầu tư trong khi hạ tầng tài chính để duy trì và mở rộng sản xuất lại thiếu hụt.
+
+\begin{itemize}
+    \item \textbf{Tín dụng hạn chế:} 78\% hộ sản xuất nông nghiệp quy mô nhỏ không đủ tài sản thế chấp để tiếp cận tín dụng thông thường (VCCI, 2023). Với hộ OCOP, rào cản này càng rõ hơn vì tài sản chủ yếu là tay nghề và phương thức sản xuất thủ công.
+
+    \item \textbf{Đơn hàng phụ thuộc hội chợ theo mùa:} Trung bình đơn hàng chỉ được đặt trước 7--14 ngày, không thể lên kế hoạch sản xuất ở quy mô lớn hơn.
+
+    \item \textbf{Chuỗi trung gian dài:} Hộ sản xuất phải bán qua 2--3 tầng thương lái trước khi đến tay người tiêu dùng, mất 30--45\% biên lợi ở mỗi tầng.
+
+    \item \textbf{Thiếu dữ liệu tín nhiệm:} Các hộ sản xuất không có lịch sử giao dịch, không có điểm tín nhiệm số, không có bằng chứng năng lực giao hàng -- những yếu tố cần thiết để tiếp cận nhà mua hàng tổ chức hoặc nguồn vốn ưu đãi.
+\end{itemize}
+
+\subsubsection{Tổng quan vấn đề cần giải quyết}
+
+Ba thách thức trên liên kết với nhau theo một logic riêng: dòng tiền tiết kiệm của người trẻ đang ``chảy qua'' hệ thống ngân hàng mà không tạo ra giá trị gì cho cộng đồng xung quanh họ. Nếu có một cơ chế định hướng dòng tiền này một cách có cấu trúc, cả ba vấn đề đều có lối ra:
+
+\begin{table}[H]
+\centering
+\caption{Tổng quan vấn đề và hướng giải quyết}
+\begin{tabular}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\hline
+\textbf{Vấn đề} & \textbf{Nguyên nhân gốc rễ} & \textbf{Nếu giải được} \\
+\hline
+Người trẻ không gắn bó ngân hàng & Không có lý do cảm xúc để ở lại & Tạo impact dashboard cá nhân hóa \\
+\hline
+Ngân hàng số mất loyalty & Sản phẩm giống nhau, dễ thay thế & Tài sản dữ liệu (Impact Score) không mang sang ngân hàng khác được \\
+\hline
+Hộ OCOP thiếu vốn, đơn hàng bấp bênh & Không có dòng tiền có cấu trúc & Purchase order financing từ OCOP Fund \\
+\hline
+\end{tabular}
+\end{table}
+
+OCOP Pay không giải quyết từng vấn đề một cách độc lập. OCOP Pay tái kiến trúc lại vòng lặp giá trị để giải cả ba đồng thời và làm cho chúng tự tăng cường lẫn nhau.
+
+\subsection{Khoảng trống thị trường và cơ hội}
+
+\subsubsection{Hạn chế của các giải pháp hiện tại}
+
+Phân tích các giải pháp hiện có theo bốn tiêu chí then chốt:
+
+\begin{table}[H]
+\centering
+\caption{So sánh các giải pháp hiện tại}
+\begin{tabular}{|p{3cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+\textbf{Giải pháp hiện có} & \textbf{Tạo vốn ổn định cho OCOP} & \textbf{Không đòi thay đổi hành vi người trẻ} & \textbf{Reward cá nhân hóa} & \textbf{Tự cân bằng tài chính} \\
+\hline
+Cashback OCOP – MB Bank, Agribank Green & Không & Phải chủ động mua & Voucher chung & Ngân hàng bù lỗ \\
+\hline
+OCOP trên Shopee / Lazada & Không & Phải chủ động tìm & Không & Marketplace fee \\
+\hline
+Agribank tín dụng nông nghiệp & Có (vốn vay) & Không liên quan & Không & Lãi vay \\
+\hline
+CSR Highlands / Vinamilk & Không ổn định & Có & Không & Chi phí marketing \\
+\hline
+OCOP Pay (đề xuất) & PO Financing + OCOP Fund & Chỉ cần tiết kiệm & AI Gift Intelligence & Thương hiệu thu mua trả \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Xu hướng ngân hàng số và tiêu dùng bền vững}
+
+Ba xu hướng vĩ mô đang hội tụ để tạo ra cửa sổ thị trường hiếm có cho giải pháp như OCOP Pay:
+
+\begin{itemize}
+    \item \textbf{Open Banking lan rộng:} Thông tư 09/2023/TT-NHNN có hiệu lực từ 7/2023 đặt nền tảng pháp lý cho Open API giữa các ngân hàng và Fintech. Đến Quý IV/2025, 18 trong số 49 ngân hàng đã công bố sandbox Open Banking API có thể tích hợp.
+
+    \item \textbf{Thế hệ Z ưu tiên thương hiệu có giá trị xã hội:} Theo Edelman Trust Barometer 2024 (Đông Nam Á): 71\% Gen Z trả lời sẽ trả nhiều hơn hoặc duy trì trung thành hơn với thương hiệu có tác động xã hội có thể đo được. Kết quả này phù hợp với mức 78,9\% người được khảo sát trong nghiên cứu sơ cấp của nhóm sẵn sàng gắn kết hơn nếu thấy tác động cụ thể từ tiền tiết kiệm của họ.
+
+    \item \textbf{ESG trở thành điều kiện đưa vào danh mục đầu tư:} Basel IV và IFC Performance Standards buộc các ngân hàng tăng tỷ trọng danh mục tài chính xanh/bền vững. OCOP Fund là sản phẩm tín dụng xanh có dữ liệu tác động thực đo được.
+\end{itemize}
+
+\subsubsection{Tiềm năng phát triển hệ sinh thái OCOP}
+
+Chương trình OCOP quốc gia đã hình thành một cơ sở hạ tầng chứng nhận và dữ liệu chất lượng chưa được khai thác hết tiềm năng.
+
+\begin{itemize}
+    \item 13.368 sản phẩm có chứng nhận nhà nước tạo lớp lọc chất lượng miễn phí cho OCOP Pay, giảm rủi ro thẩm định tín dụng cho OCOP Fund.
+    \item Chuỗi cung ứng OCOP trải rộng cả nước cho phép phân bổ nguồn cung theo địa lý, tăng khả năng duy trì hoạt động khi một vùng gặp sự cố thời vụ.
+    \item Cột mốc 2026: Bộ NN\&PTNT mở cổng dữ liệu OCOP quốc gia qua API, tạo cơ sở cho OCOP Pay tích hợp trực tiếp dữ liệu sản phẩm và hộ sản xuất, không cần trung gian.
+\end{itemize}
+
+\subsubsection{Cơ hội ứng dụng AI}
+
+Ba xu hướng AI cụ thể tạo ra điều kiện kỹ thuật mà 2 năm trước chưa khả thi, mở ra cơ hội để OCOP Pay tự động hóa và cá nhân hóa hệ sinh thái tài chính tuần hoàn:
+
+\begin{itemize}
+    \item \textbf{Foundation model chi phí thấp:} Chi phí API của mô hình ngôn ngữ lớn (LLM) giảm khoảng 10 lần từ 2022--2025. Việc xử lý ngôn ngữ tự nhiên cho hồ sơ hộ OCOP giờ đây khả thi ở quy mô hàng chục nghìn hộ.
+    \item \textbf{Dữ liệu hành vi đủ dày cho mô hình gợi ý:} Người dùng ngân hàng số Việt Nam thực hiện trung bình 4,2 giao dịch/ngày (NHNN, 2024) -- đủ dày để huấn luyện mô hình gợi ý quà tặng có ý nghĩa trong vòng 90 ngày.
+    \item \textbf{AI ngôn ngữ vùng miền:} VNPT Smartbot hỗ trợ tiếng Việt có ngữ điệu vùng miền, giải quyết ngoại lệ trong onboarding hộ OCOP ở các tỉnh miền núi.
+\end{itemize}
+
+\subsection{Lý do ``Vì sao AI?'' -- Không thể giải quyết bằng phương pháp truyền thống}
+
+Bất kỳ hồ sơ nào ứng dụng AI cũng phải trả lời được câu hỏi: ``Vì sao không dùng rule trước, AI sau?''. OCOP Pay có bốn bài toán kỹ thuật mà rule thủ công không giải được:
+
+\subsubsection{Không thể ghép nối thủ công ở quy mô lớn}
+
+Mỗi lần phân bổ vốn từ OCOP Fund, hệ thống phải giải bài toán tối ưu đa ràng buộc theo thời gian thực:
+
+\begin{itemize}
+    \item $N$ hộ OCOP, mỗi hộ có: năng lực sản xuất, lịch sử hoàn trả, chứng nhận sao, địa lý, mùa vụ, loại sản phẩm.
+    \item $M$ đơn hàng thu mua từ thương hiệu, mỗi đơn có: loại hàng, số lượng, thời hạn, tiêu chuẩn chất lượng.
+    \item $K$ người tiết kiệm với profile quà tặng khác nhau cần được phân bổ Impact Score.
+\end{itemize}
+
+Với $N \times M \times K$ = hàng triệu tổ hợp cần tối ưu đồng thời, rule thủ công không thể xử lý real-time. OCOP Pay dùng thuật toán constraint-based matching kết hợp VNPT Smartbot cho phần xử lý ngôn ngữ tự nhiên trong hồ sơ hộ OCOP.
+
+\subsubsection{Nhu cầu cá nhân hóa trải nghiệm người dùng}
+
+Người trẻ không phản hồi với voucher đồng nhất -- số liệu khảo sát cho thấy 87,3\% không sử dụng hết voucher, với nguyên nhân chính là ``không phù hợp nhu cầu'' (56,9\%). Để gift recommendation có giá trị thực, hệ thống cần:
+
+\begin{itemize}
+    \item Phân loại hành vi chi tiêu theo category (F\&B, lifestyle, travel\ldots).
+    \item Dự báo thời điểm chi tiêu theo xu hướng cá nhân.
+    \item Cập nhật real-time khi hành vi thay đổi.
+\end{itemize}
+
+Rule thủ công có thể phân nhóm được (``người hay ăn ngoài''), nhưng không thể dự báo thời điểm và không thể cập nhật real-time. VNPT Smartbot xử lý phần này.
+
+\subsubsection{Nhu cầu dự báo và quản trị rủi ro}
+
+Hộ OCOP quy mô nhỏ không có hệ thống báo cáo tiến độ. Để bảo vệ quỹ tiết kiệm của người trẻ, OCOP Pay cần phát hiện rủi ro trễ hạn trước khi xảy ra:
+
+\begin{itemize}
+    \item Phân tích pattern lịch sử: hộ nào hay trễ vào tháng nào, vì thời tiết hay vì nguyên liệu?
+    \item Kết hợp tín hiệu bên ngoài: dữ liệu thời tiết khu vực, giá nguyên liệu đầu vào, tín hiệu từ mạng xã hội.
+    \item Cảnh báo sớm 2--3 tuần trước deadline, cho phép ngân hàng can thiệp kịp thời.
+\end{itemize}
+
+Nghiên cứu của FAO (2022) về supply chain risk trong nông nghiệp quy mô nhỏ cho thấy early warning systems giảm tỷ lệ vỡ hợp đồng xuống 40--60\% so với monitoring thủ công.
+
+\subsubsection{Nhu cầu đo lường tác động theo thời gian thực}
+
+Đây là điểm phân biệt OCOP Pay với mọi chương trình CSR hay cashback hiện tại: Impact Score không phải số đại trà, mà là số cá nhân hóa chính xác cho từng người dùng. 78,9\% người dùng trong khảo sát cho biết sẽ gắn kết hơn nếu thấy được tác động cụ thể từ tiền tiết kiệm của họ.
+
+\textit{Ví dụ minh họa: ``Tiền tiết kiệm của bạn đã tài trợ cho 3 hộ OCOP ở Quảng Nam, tạo ra ưu đãi cho 89 sản phẩm, và giúp [Tên hộ] giao được 450 kg chiếu cói đúng hạn.''}
+
+Tuyến dữ liệu này chỉ được xây dựng nếu AI làm cầu nối theo thời gian thực giữa dữ liệu tiết kiệm, dữ liệu chuỗi cung ứng và profile người dùng.
+
+\subsection{Khách hàng mục tiêu và nhu cầu}
+
+OCOP Pay có bốn nhóm khách hàng chính. Ngân hàng đối tác không phải ``người dùng cuối'' -- họ là đối tác hạ tầng. Ba nhóm còn lại mới là khách hàng thực sự và giá trị OCOP Pay tạo ra cho từng nhóm phải đủ lớn để họ tự nguyện tham gia.
+
+\subsubsection{Người trẻ tiết kiệm (18--35 tuổi)}
+
+\begin{table}[H]
+\centering
+\caption{Phân tích nhóm khách hàng: Người trẻ tiết kiệm}
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Tiêu chí} & \textbf{Nội dung} \\
+\hline
+Quy mô phân khúc & $\sim$5,1 triệu người có thói quen tiết kiệm định kỳ qua app ngân hàng số (ước tính từ NHNN + GSO) \\
+\hline
+Pain point xác nhận & ``App nào cũng giống nhau'' (74\%); ``Tiết kiệm nhưng không biết tiền đang làm gì'' (62,4\% toàn mẫu, 79,2\% nhóm 23--35 tuổi); ``Voucher nhận được nhưng không dùng hết'' (87,3\%) \\
+\hline
+Điều họ thực sự muốn & Lý do cảm xúc để chọn 1 ngân hàng và ở lại; cảm giác tiền mình đang tạo ra điều gì đó; quà đúng nhu cầu, đúng thời điểm \\
+\hline
+Lợi ích từ OCOP Pay & Lãi suất OCOP Fund cao hơn +0,2--0,5\%/năm; quà cá nhân hóa từ AI Gift Intelligence (84,4\% người dùng xác nhận nhu cầu); Impact Profile là tài sản số không mang sang ngân hàng khác được \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Ngân hàng số đối tác (Infrastructure Partner)}
+
+\begin{table}[H]
+\centering
+\caption{Phân tích nhóm đối tác: Ngân hàng số}
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Tiêu chí} & \textbf{Nội dung} \\
+\hline
+Vai trò & Hạ tầng tài chính: quản lý OCOP Fund, giải ngân vay, cấp ưu đãi reward. OCOP Pay là AI layer chạy trên hạ tầng ngân hàng, không thay thế ngân hàng. \\
+\hline
+Lợi ích & Tăng DAU từ dashboard tiết kiệm có tác động; tài sản huy động mới từ OCOP Fund; danh mục tín dụng SME nông nghiệp chất lượng cao; brand narrative ESG có số liệu đo được \\
+\hline
+Điều kiện tối thiểu & Có sandbox Open Banking API; có sản phẩm tiết kiệm kỳ hạn; có danh mục tín dụng SME/nông nghiệp; phê duyệt cơ chế reward theo Impact Score \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Hộ sản xuất OCOP / Làng nghề}
+
+\begin{table}[H]
+\centering
+\caption{Phân tích nhóm khách hàng: Hộ sản xuất OCOP}
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Tiêu chí} & \textbf{Nội dung} \\
+\hline
+Quy mô phân khúc & $\sim$8.000--10.000 hộ sản xuất đủ điều kiện tham gia pilot (đã có chứng nhận, có năng lực giao hàng) \\
+\hline
+Pain point & 78\% không đủ tài sản thế chấp (VCCI, 2023); đơn hàng đặt trước trung bình 7--14 ngày; giá thu mua bị ép bởi 2--3 tầng trung gian \\
+\hline
+Lợi ích từ OCOP Pay & Purchase order financing: vay vốn dựa trên đơn hàng đã ký -- không cần thế chấp; đơn hàng B2B được AI khớp tự động; dữ liệu giá và xu hướng nhu cầu theo mùa \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Doanh nghiệp thu mua (B2B)}
+
+\begin{table}[H]
+\centering
+\caption{Phân tích nhóm khách hàng: Doanh nghiệp thu mua B2B}
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Tiêu chí} & \textbf{Nội dung} \\
+\hline
+Đặc điểm & Chuỗi F\&B (Highlands Coffee, chuỗi trà sữa, nhà hàng), thương hiệu FMCG, nhà phân phối muốn hàng Việt chất lượng \\
+\hline
+Pain point & Nguồn hàng không ổn định; khó truy xuất nguồn gốc cho báo cáo ESG; thiếu câu chuyện sustainability có số liệu đo được \\
+\hline
+Lợi ích từ OCOP Pay & Chuỗi cung ứng ổn định từ hộ OCOP được AI sàng lọc và giám sát tiến độ; QR truy xuất nguồn gốc tự động; báo cáo sustainability tích hợp; marketing 0đ qua Impact Card người dùng \\
+\hline
+Vai trò trong mô hình & ``Người trả tiền thầm lặng'': doanh thu từ thu mua OCOP là nguồn tài chính để ngân hàng reward người tiết kiệm -- đây là điểm làm toàn bộ mô hình tự cân bằng \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Mục tiêu chiến lược}
+
+OCOP Pay đặt mục tiêu chiến lược trong 12 tháng đầu: thiết lập thành công mô hình tài chính tuần hoàn giữa người trẻ tiết kiệm, hộ sản xuất OCOP và thương hiệu thu mua, sử dụng AI làm cầu nối.
+
+Tầm nhìn 3 năm: OCOP Pay đặt mục tiêu trở thành hạ tầng tài chính số kết nối 1 triệu người trẻ và 10.000 hộ sản xuất OCOP. Nhóm không chỉ xây dựng một ứng dụng, mà đang tạo ra một bản thiết kế (blueprint) cho mô hình Digital Circular Finance tại các thị trường mới nổi.
+
+\subsubsection{Mục tiêu kinh tế}
+
+\begin{table}[H]
+\centering
+\caption{Mục tiêu kinh tế 12 tháng}
+\begin{tabular}{|l|p{4.5cm}|p{3cm}|p{4cm}|}
+\hline
+\textbf{Nhóm} & \textbf{Chỉ số} & \textbf{Mục tiêu 12 tháng} & \textbf{Căn cứ} \\
+\hline
+Người trẻ & Tài khoản active (TK/tháng) & 5.000 TK (0,1\% SAM) & Tính năng mới ngân hàng số thường đạt 2.000--3.000 active user trong năm đầu \\
+\hline
+Người trẻ & Day-30 retention & $\geq$35\% & Ngành ngân hàng số VN: 28--32\%; OCOP Pay kỳ vọng tăng nhờ Impact Dashboard và matching real-time \\
+\hline
+Người trẻ & NPS & $\geq$45 & Benchmark app tài chính VN: 30--40 \\
+\hline
+Hộ OCOP & Hộ nhận vốn & $\geq$50 hộ & 50 triệu VNĐ OCOP Fund / 1 tỷ VNĐ/hộ trung bình \\
+\hline
+Hộ OCOP & Hoàn trả đúng hạn & $\geq$88\% & Benchmark tín dụng nông nghiệp SME có đơn hàng: 85--92\%; có cơ chế AI giám sát \\
+\hline
+Thương hiệu & Đơn hàng B2B/tháng & $\geq$20 đơn & Phí thành công 1,5\% đóng góp 18 triệu VNĐ/năm \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Mục tiêu xã hội}
+
+\begin{itemize}
+    \item Tổng giá trị về tay hộ OCOP không qua trung gian: $\geq$ 500 triệu VNĐ trong năm đầu (50 hộ $\times$ 10 triệu VNĐ/hộ/kỳ).
+    \item Duy trì hoặc tạo mới ít nhất 200 việc làm tại các làng nghề (ước tính 4 lao động/hộ $\times$ 50 hộ).
+    \item Tỷ lệ người dùng chia sẻ Impact Card lên mạng xã hội: $\geq$15\% trong 12 tháng.
+\end{itemize}
+
+\subsubsection{Mục tiêu công nghệ}
+
+\begin{itemize}
+    \item Matching algorithm đạt precision $\geq$80\% trong giai đoạn pilot.
+    \item Gift Intelligence đạt CTR $\geq$20\% -- cao gấp đôi so với push notification thông thường của ngân hàng (8--10\%).
+    \item Risk Intelligence phát hiện trễ hạn 2--3 tuần trước deadline -- được xác nhận qua backtest trên bộ dữ liệu lịch sử tín dụng nông nghiệp.
+\end{itemize}
+
+\subsubsection{Mục tiêu tài chính và nguồn lực}
+
+\begin{itemize}
+    \item Tổng ngân sách vận hành 12 tháng (50.000 người dùng): $\sim$250 triệu VNĐ.
+    \item Nguồn vốn dự kiến: giải thưởng cuộc thi (20 triệu), đối tác ngân hàng (200 triệu), quỹ phát triển sinh viên.
+    \item Hòa vốn dự kiến: 18 tháng sau khi đạt 50.000 người dùng và doanh thu phí B2B ổn định.
+\end{itemize}
+
+%=========================
+\section{GIẢI PHÁP}
+%=========================
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Tong_quan_giai_phap.png}
+    % \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}[Chèn sơ đồ kiến trúc MVP tại đây]\vspace{3cm}}}
+    \caption{Tổng quan giải pháp OCOP Pay}
+    \label{fig:mvp-architecture}
+\end{figure}
+
+\subsection{Tổng quan giải pháp}
+
+OCOP Pay là một nền tảng công nghệ tài chính ứng dụng AI nhằm hỗ trợ ngân hàng số mở rộng tệp khách hàng trẻ thông qua trải nghiệm tiết kiệm có mục đích, đồng thời tạo thêm một kênh hỗ trợ vốn lưu động cho các hộ OCOP có hồ sơ sản xuất và đơn hàng rõ ràng. Giải pháp được thiết kế như một lớp công nghệ trung gian tích hợp với ngân hàng đối tác, tập trung vào ba nhóm năng lực chính: chuẩn hóa dữ liệu hồ sơ OCOP, hỗ trợ khớp nhu cầu vốn với năng lực sản xuất và cá nhân hóa trải nghiệm tác động cho người dùng trẻ.
+
+Về bản chất, OCOP Pay không thay thế ngân hàng, không đóng vai trò tổ chức tín dụng và không trực tiếp vận hành dòng tiền. Ngân hàng vẫn là đơn vị phát hành sản phẩm tiết kiệm, thẩm định khoản vay, giải ngân và quản lý rủi ro tín dụng. OCOP Pay cung cấp các công cụ số giúp quá trình này dễ tiếp cận hơn, minh bạch hơn và có khả năng tạo ra câu chuyện gắn kết người dùng tốt hơn so với các chương trình ưu đãi ngắn hạn thông thường.
+
+Điểm khác biệt của giải pháp nằm ở cách kết nối hai nhu cầu tưởng chừng tách biệt. Một bên là nhóm người trẻ sử dụng ngân hàng số nhưng thiếu động lực gắn bó dài hạn với ứng dụng; bên còn lại là các hộ OCOP có sản phẩm thật, nhu cầu sản xuất thật nhưng gặp khó khăn trong việc chuẩn hóa hồ sơ, chứng minh năng lực và tiếp cận vốn lưu động đúng thời điểm. OCOP Pay tạo ra một cầu nối dữ liệu và trải nghiệm để ngân hàng có thêm cơ sở thiết kế sản phẩm tài chính gắn với phát triển địa phương, còn người dùng có thể nhìn thấy tác động xã hội của hành vi tiết kiệm.
+
+
+\subsubsection{Định vị sản phẩm}
+
+Sản phẩm được định vị dưới dạng là một chương trình tiết kiệm với mục tiêu tạo nên tác động xã hội trên ứng dụng ngân hàng số. Người dùng vẫn mở và duy trì tài khoản tiết kiệm tại ngân hàng chính thống; OCOP Pay chỉ cung cấp lớp hiển thị, gợi ý nội dung tác động, gợi ý phần thưởng và dashboard theo dõi kết quả. Cách định vị này giúp giữ nguyên tính an toàn bảo mật của sản phẩm tài chính ngân hàng, đồng thời bổ sung trải nghiệm mới để tăng mức độ quan tâm và gắn kết của người dùng trẻ.
+
+Đối với ngân hàng, OCOP Pay có thể được xem như một giải pháp B2B SaaS hoặc pilot module, tích hợp vào hệ thống hiện có thông qua API hoặc mô phỏng dữ liệu trong giai đoạn thử nghiệm. Đối với hộ OCOP, nền tảng đóng vai trò cổng nộp hồ sơ số, hỗ trợ bóc tách giấy tờ, chuẩn hóa thông tin đơn hàng và tạo đề xuất hỗ trợ các hộ kinh doanh tối ưu hóa sản phẩm sao cho phù hợp với thời thế. Đối với thương hiệu thu mua, nền tảng giúp theo dõi nguồn cung, hồ sơ năng lực và tiến độ thực hiện đơn hàng của các hộ OCOP phù hợp.
+
+
+\subsubsection{Nguyên tắc thiết kế khả thi}
+
+\begin{table}[H]
+\centering
+\caption{Nguyên tắc thiết kế khả thi của OCOP Pay}
+\begin{tabular}{|p{3.5cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Nguyên tắc} & \textbf{Nội dung áp dụng} & \textbf{Ý nghĩa triển khai} \\
+\hline
+Tách biệt dòng tiền và công nghệ & Tiền gửi, khoản vay và giải ngân được thực hiện trong hệ thống ngân hàng đối tác. OCOP Pay tập trung vào dữ liệu, AI hỗ trợ và trải nghiệm số. & Giảm rủi ro pháp lý, dễ tích hợp theo mô hình thử nghiệm và không yêu cầu nền tảng tự vận hành nghiệp vụ tài chính lõi. \\
+\hline
+AI hỗ trợ ra quyết định & AI tạo điểm phù hợp, cờ cảnh báo rủi ro và báo cáo giải thích. Quyết định cuối cùng thuộc về ngân hàng hoặc bộ phận thẩm định. & Tránh phụ thuộc vào mô hình AI chưa đủ dữ liệu thật, đồng thời vẫn thể hiện rõ giá trị tự động hóa và phân tích. \\
+\hline
+MVP tập trung vào luồng cốt lõi & Bản thử nghiệm ưu tiên onboarding, hồ sơ OCOP, matching, báo cáo đề xuất, reward và impact dashboard. & Đảm bảo sản phẩm có thể trình diễn rõ ràng, có điểm chạm người dùng và có khả năng mở rộng sau thử nghiệm. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Giá trị cốt lõi của OCOP Pay}
+
+\subsubsection{Tiết kiệm có mục đích cho người dùng trẻ}
+
+Nhiều ứng dụng ngân hàng số hiện nay cạnh tranh bằng cashback, voucher hoặc ưu đãi ngắn hạn. Các ưu đãi này có thể tạo kích hoạt ban đầu nhưng thường khó duy trì gắn kết dài hạn nếu người dùng không cảm thấy sản phẩm có ý nghĩa riêng đối với họ. OCOP Pay chuyển trải nghiệm tiết kiệm từ một hành vi tài chính đơn thuần thành một hành vi có câu chuyện: khoản tiết kiệm được gắn với các chương trình hỗ trợ sản xuất địa phương, sản phẩm OCOP và tác động xã hội có thể theo dõi.
+
+Trên giao diện ứng dụng, người dùng có thể lựa chọn mục tiêu tiết kiệm theo chủ đề như nông sản địa phương, làng nghề truyền thống, sản phẩm xanh hoặc phụ nữ khởi nghiệp. Mỗi chủ đề đi kèm một trang thông tin ngắn về nhóm hộ OCOP, loại sản phẩm, khu vực sản xuất và kết quả tác động được cập nhật theo chương trình. Điều này giúp ngân hàng tạo ra một lớp trải nghiệm cảm xúc mà không cần thay đổi bản chất của tài khoản tiết kiệm.
+
+
+\subsubsection{Chuẩn hóa hồ sơ và tăng khả năng tiếp cận vốn cho hộ OCOP}
+
+Đối với hộ OCOP, khó khăn không chỉ nằm ở thiếu vốn mà còn ở việc xác nhận các thủ tục giấy tờ như hồ sơ sản xuất, chứng nhận, hợp đồng thu mua hay năng lực giao hàng thường chưa được số hóa nhất quán. Khi thông tin bị phân tán, ngân hàng phải mất nhiều thời gian kiểm tra thủ công và khó đánh giá mức độ phù hợp của từng hồ sơ. OCOP Pay giải quyết điểm nghẽn này bằng cách tạo một bộ hồ sơ số tiêu chuẩn, trong đó các thông tin quan trọng được nhập, bóc tách và trình bày lại theo cấu trúc dễ đọc cho bên thẩm định.
+
+Bộ hồ sơ số của hộ OCOP có thể bao gồm: thông tin chủ hộ hoặc hợp tác xã, loại sản phẩm, chứng nhận OCOP, năng lực sản xuất theo tháng, số đơn hàng đã hoàn thành, hợp đồng hoặc đơn đặt hàng hiện có, nhu cầu vốn ngắn hạn, kế hoạch sử dụng vốn và mốc giao hàng dự kiến. Những dữ liệu này không tự động đưa các hộ OCOP thành đối tượng được vay, nhưng hỗ trợ quá trình đánh giá minh bạch hơn và giảm chi phí xử lý hồ sơ ban đầu.
+
+
+\subsubsection{Tăng giá trị khác biệt cho ngân hàng số}
+
+Đối với ngân hàng đối tác, OCOP Pay đóng vai trò một module tăng cường trải nghiệm khách hàng trẻ và hỗ trợ xây dựng sản phẩm tài chính gắn với ESG, phát triển địa phương và tài chính bao trùm. Thay vì chỉ cung cấp một sản phẩm tiết kiệm có lãi suất, ngân hàng có thêm một câu chuyện sản phẩm rõ ràng: người dùng tiết kiệm, ngân hàng thiết kế chương trình hỗ trợ các hộ sản xuất phù hợp, và kết quả tác động được hiển thị minh bạch trên ứng dụng.
+
+Giá trị kinh doanh cho ngân hàng không nằm ở việc thay đổi hoàn toàn mô hình tín dụng, mà ở khả năng tăng mức độ sử dụng ứng dụng, tạo chủ đề truyền thông khác biệt, thu hút người dùng trẻ quan tâm đến tiêu dùng có trách nhiệm và mở thêm nguồn dữ liệu phục vụ đánh giá các chương trình tài chính địa phương. Trong giai đoạn đầu, ngân hàng có thể triển khai dưới dạng pilot giới hạn để đo lường các chỉ số như số người tham gia chương trình, tỷ lệ quay lại dashboard, tỷ lệ đổi thưởng và mức độ hài lòng của người dùng.
+
+
+\subsubsection{Tạo kênh kết nối đáng tin cậy cho thương hiệu thu mua}
+
+Các thương hiệu F\&B, bán lẻ hoặc FMCG có nhu cầu tìm nguồn cung ổn định từ sản phẩm địa phương thường gặp khó khăn trong việc kiểm chứng năng lực sản xuất, tiến độ giao hàng và tính nhất quán chất lượng. OCOP Pay có thể hỗ trợ bằng cách cung cấp hồ sơ năng lực đã chuẩn hóa, tiến độ sản xuất được cập nhật định kỳ và dữ liệu tác động phục vụ truyền thông bền vững. Nhờ đó, thương hiệu có thêm cơ sở lựa chọn đối tác cung ứng, còn hộ OCOP có cơ hội tiếp cận đơn hàng rõ ràng hơn.
+
+
+\subsection{Mô hình vận hành của giải pháp}
+
+Mô hình vận hành của OCOP Pay được thiết kế theo chuỗi giá trị khép kín nhưng không yêu cầu xử lý tài chính phức tạp ở phía nền tảng. Chuỗi vận hành bắt đầu từ việc người dùng tham gia chương trình tiết kiệm có mục đích, hộ OCOP gửi hồ sơ và đơn hàng, hệ thống AI phân tích dữ liệu để tạo báo cáo đề xuất, ngân hàng thẩm định và quyết định theo quy trình nội bộ, sau đó kết quả tác động và phần thưởng được hiển thị trở lại cho người dùng..
+
+\begin{table}[H]
+\centering
+\caption{Mô hình vận hành OCOP Pay}
+\begin{tabular}{|p{1.5cm}|p{5.5cm}|p{6cm}|}
+\hline
+\textbf{Bước} & \textbf{Mô tả vận hành} & \textbf{Đầu ra chính} \\
+\hline
+1. Người dùng tham gia & Người dùng mở chương trình OCOP Savings Program trong app ngân hàng, chọn chủ đề tác động và hoàn tất khảo sát sở thích. & Hồ sơ sở thích, mục tiêu tiết kiệm mô phỏng hoặc tài khoản tiết kiệm do ngân hàng quản lý. \\
+\hline
+2. Hộ OCOP nộp hồ sơ & Hộ OCOP tải chứng nhận, mô tả sản phẩm, công suất, đơn hàng hoặc thỏa thuận thu mua. & Bộ hồ sơ số đã chuẩn hóa và trạng thái đầy đủ/thiếu thông tin. \\
+\hline
+3. AI phân tích và scoring & Hệ thống OCR bóc tách dữ liệu, scoring engine tính điểm phù hợp, LLM tạo báo cáo giải thích. & Match Score, Risk Flag, báo cáo đề xuất và danh sách điểm cần kiểm tra. \\
+\hline
+4. Ngân hàng thẩm định & Cán bộ phụ trách xem báo cáo, đối chiếu tài liệu gốc và đưa ra quyết định theo quy trình nội bộ. & Trạng thái tiếp tục thẩm định, yêu cầu bổ sung hoặc không phù hợp. \\
+\hline
+5. Theo dõi tiến độ & Hộ OCOP cập nhật mốc sản xuất, đơn hàng, hình ảnh minh chứng và phản hồi từ bên thu mua. & Trạng thái Green/Yellow/Red, cảnh báo rủi ro và nhật ký cập nhật. \\
+\hline
+6. Reward và impact & Người dùng xem kết quả chương trình, nhận gợi ý reward và chia sẻ Impact Card nếu muốn. & Dashboard tác động, tỷ lệ tương tác, dữ liệu đo hiệu quả reward. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Luồng người dùng trẻ}
+
+Người dùng truy cập chương trình OCOP Savings Program trong ứng dụng ngân hàng đối tác. Tại đây, họ có thể đọc thông tin về mục tiêu chương trình, chọn chủ đề tác động quan tâm và thiết lập một khoản tiết kiệm định kỳ hoặc mục tiêu tiết kiệm cá nhân. Hệ thống có thể bổ sung một khảo sát ngắn về sở thích sản phẩm, vùng miền, loại quà tặng và mối quan tâm xã hội để phục vụ cá nhân hóa reward sau này.
+
+Sau khi tham gia chương trình, người dùng được theo dõi một Impact Dashboard cá nhân. Dashboard này không khẳng định rằng từng đồng tiền cụ thể được chuyển trực tiếp đến một hộ OCOP cụ thể, mà thể hiện tỷ lệ đóng góp trong chương trình ngân hàng đang triển khai. Cách hiển thị cần minh bạch, dễ hiểu và tránh gây hiểu nhầm về quan hệ sở hữu hoặc quyền đòi nợ giữa người gửi tiền và hộ OCOP.
+
+
+\subsubsection{Luồng hộ OCOP}
+
+Hộ OCOP hoặc hợp tác xã đăng ký hồ sơ trên cổng dành cho đối tác sản xuất. Quy trình bắt đầu bằng việc nhập thông tin cơ bản, tải lên giấy chứng nhận, mô tả sản phẩm, công suất, vùng nguyên liệu, đơn hàng hoặc thỏa thuận thu mua nếu có. Công nghệ OCR có thể được sử dụng để bóc tách thông tin từ giấy tờ, giảm thao tác nhập liệu và hạn chế sai sót trong quá trình chuẩn hóa hồ sơ.
+
+Sau khi hồ sơ được tạo, hệ thống kiểm tra mức độ đầy đủ của thông tin và gợi ý các trường còn thiếu. Ví dụ: nếu hộ OCOP có đơn hàng nhưng chưa điền thời hạn giao hàng, hệ thống yêu cầu bổ sung; nếu có chứng nhận nhưng ảnh tải lên mờ, hệ thống yêu cầu chụp lại; nếu nhu cầu vốn không khớp với quy mô đơn hàng, hệ thống đánh dấu để bên thẩm định xem xét. Các bước này giúp nâng chất lượng hồ sơ trước khi chuyển sang giai đoạn scoring.
+
+
+\subsubsection{Luồng ngân hàng và thẩm định}
+
+Đối với ngân hàng, OCOP Pay cung cấp một màn hình tổng hợp các hồ sơ OCOP theo mức độ sẵn sàng: hồ sơ đầy đủ, hồ sơ cần bổ sung, hồ sơ có đơn hàng xác nhận và hồ sơ có cờ rủi ro. Mỗi hồ sơ đi kèm một báo cáo ngắn gồm thông tin chính, điểm phù hợp, lý do đề xuất, điểm cần kiểm tra thêm và lịch sử cập nhật. Báo cáo này giúp cán bộ phụ trách tiết kiệm thời gian sàng lọc ban đầu, nhưng không thay thế quy trình thẩm định tín dụng chính thức.
+
+Trong bản thử nghiệm, vai trò ngân hàng có thể được mô phỏng bằng một màn hình phê duyệt nội bộ: người đánh giá đọc báo cáo AI, xem tài liệu gốc, chọn “đề xuất tiếp tục thẩm định”, “yêu cầu bổ sung hồ sơ” hoặc “không phù hợp”. Cách mô phỏng này đủ để chứng minh logic vận hành mà không cần tích hợp thật vào core banking.
+
+
+\subsubsection{Luồng reward và impact}
+
+Sau khi chương trình có kết quả, người dùng nhận được cập nhật về tác động tổng hợp như số hồ sơ OCOP đã được hỗ trợ chuẩn hóa, số đơn hàng được theo dõi, số sản phẩm địa phương được đưa vào danh mục hoặc số hộ sản xuất tham gia chương trình. Phần thưởng có thể là voucher, mẫu thử sản phẩm, ưu đãi mua hàng hoặc nội dung trải nghiệm gắn với sản phẩm OCOP. Trong giai đoạn đầu, reward nên được thiết kế ở quy mô nhỏ, dễ kiểm soát chi phí và có thể đo lường tỷ lệ tương tác.
+
+\subsection{Kiến trúc dữ liệu và các module AI}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{data_module_dukien.png}
+    % \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}[Chèn sơ đồ kiến trúc MVP tại đây]\vspace{3cm}}}
+    \caption{Kiến trúc dữ liệu và các module AI dự kiến}
+    \label{fig:mvp-architecture}
+\end{figure}
+OCOP Pay sử dụng kiến trúc dữ liệu theo hướng đơn giản và có thể mở rộng. Dữ liệu đầu vào được chia thành bốn nhóm: dữ liệu người dùng tham gia chương trình, dữ liệu hồ sơ OCOP, dữ liệu đơn hàng hoặc nhu cầu thu mua và dữ liệu tương tác với reward/impact dashboard. Trong bản thử nghiệm, dữ liệu có thể được lưu dưới dạng cơ sở dữ liệu quan hệ hoặc bảng dữ liệu có cấu trúc, ưu tiên tính minh bạch và khả năng giải thích hơn là mô hình học sâu phức tạp.
+
+\subsubsection{Document \& Profile Intelligence}
+
+Module này hỗ trợ đọc và chuẩn hóa hồ sơ đầu vào. Khi hộ OCOP tải lên giấy chứng nhận, hợp đồng thu mua hoặc thông tin sản phẩm, hệ thống sử dụng OCR để trích xuất các trường quan trọng như tên hộ, loại sản phẩm, địa phương, mức sao OCOP, ngày cấp, số lượng đặt hàng và thời hạn giao hàng. Sau đó, hệ thống đưa dữ liệu về một mẫu hồ sơ thống nhất để phục vụ scoring và báo cáo.
+
+Trong trường hợp dữ liệu chưa đủ sạch, module không tự động kết luận mà hiển thị trạng thái cần xác minh. Ví dụ: “chưa đọc được ngày cấp chứng nhận”, “thiếu thông tin bên mua”, “đơn hàng chưa có thời hạn giao hàng”. Cơ chế này làm tăng độ tin cậy vì hệ thống thể hiện rõ phần nào chắc chắn, phần nào cần con người kiểm tra thêm.
+
+
+\begin{table}[H]
+\centering
+\caption{Các loại tài liệu và cách sử dụng trong hệ thống}
+\begin{tabular}{|p{3.5cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Loại tài liệu} & \textbf{Trường dữ liệu cần bóc tách} & \textbf{Cách sử dụng trong hệ thống} \\
+\hline
+Giấy chứng nhận OCOP & Tên cơ sở, địa phương, sản phẩm, hạng sao, thời hạn hoặc ngày cấp. & Xác minh hồ sơ sản phẩm và tính điểm Document Reliability. \\
+\hline
+Đơn hàng/hợp đồng thu mua & Bên mua, sản phẩm, số lượng, tiêu chuẩn, ngày giao, điều khoản thanh toán. & Tính Order Fit, Timeline Fit và xác định nhu cầu vốn ngắn hạn. \\
+\hline
+Thông tin năng lực sản xuất & Công suất/tháng, vùng nguyên liệu, nhân sự, lịch sử đơn hàng, tồn kho. & Tính Capacity Fit và cảnh báo trường hợp đơn hàng vượt năng lực. \\
+\hline
+Cập nhật tiến độ & Mốc sản xuất, ảnh minh chứng, trạng thái giao hàng, phản hồi của bên thu mua. & Theo dõi Risk Monitoring và cập nhật Impact Dashboard. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{AI Matchmaker}
+
+AI Matchmaker là module trung tâm của OCOP Pay. Trong giai đoạn đầu, module này nên được triển khai bằng scoring engine có quy tắc rõ ràng, kết hợp với lớp giải thích bằng ngôn ngữ tự nhiên. Điểm phù hợp có thể được tính từ các nhóm tiêu chí như: mức độ đầy đủ của hồ sơ, độ tin cậy của chứng nhận, sự phù hợp giữa công suất và đơn hàng, lịch sử hoàn thành đơn nếu có, thời hạn giao hàng, khoảng cách vận chuyển và mức độ rủi ro của nhu cầu vốn.
+
+Ví dụ, hệ thống có thể chia điểm thành năm nhóm: Order Fit, Capacity Fit, Timeline Fit, Document Reliability và Risk Signal. Mỗi nhóm điểm được hiển thị kèm lý do: hộ OCOP có sản phẩm phù hợp với đơn hàng, công suất đủ đáp ứng trong thời gian dự kiến, hồ sơ còn thiếu một tài liệu hoặc thời hạn giao hàng quá gấp. Nhờ đó, điểm số không chỉ là một con số mà trở thành công cụ giải thích hỗ trợ thẩm định.
+
+
+\begin{table}[H]
+\centering
+\caption{Các nhóm điểm trong AI Matchmaker}
+\begin{tabular}{|p{3cm}|p{3cm}|p{5cm}|p{2cm}|}
+\hline
+\textbf{Nhóm điểm} & \textbf{Ý nghĩa} & \textbf{Ví dụ tiêu chí} & \textbf{Trọng số} \\
+\hline
+Order Fit & Mức phù hợp giữa đơn hàng và sản phẩm OCOP & Loại sản phẩm, số lượng, tiêu chuẩn chất lượng & 25\% \\
+\hline
+Capacity Fit & Khả năng đáp ứng của hộ OCOP & Công suất/tháng, tồn kho, nhân lực, vùng nguyên liệu & 25\% \\
+\hline
+Timeline Fit & Khả năng giao hàng đúng hạn & Thời hạn giao hàng, khoảng cách vận chuyển, tiến độ hiện tại & 20\% \\
+\hline
+Document Reliability & Độ đầy đủ và rõ ràng của hồ sơ & Chứng nhận, hợp đồng, thông tin bên mua, ảnh minh chứng & 15\% \\
+\hline
+Risk Signal & Các dấu hiệu cần kiểm tra thêm & Trễ cập nhật, đơn hàng quá lớn, thiếu dữ liệu lịch sử & 15\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Risk Monitoring}
+
+Risk Monitoring theo dõi tiến độ sau khi hồ sơ được đưa vào chương trình thử nghiệm hoặc sau khi ngân hàng quyết định tiếp tục thẩm định. Module này không cần sử dụng mô hình dự báo phức tạp ở giai đoạn đầu, mà có thể bắt đầu bằng các cờ cảnh báo đơn giản: hồ sơ không cập nhật đúng hạn, hộ OCOP yêu cầu gia hạn nhiều lần, thương hiệu thu mua phản hồi chưa đạt chất lượng, hoặc mốc giao hàng bị trễ so với kế hoạch.
+
+Mỗi hồ sơ có thể được phân loại theo ba trạng thái: Green, Yellow và Red. Green nghĩa là tiến độ bình thường; Yellow nghĩa là có dấu hiệu cần nhắc nhở hoặc xác minh; Red nghĩa là cần can thiệp hoặc xem xét lại. Cách phân loại này dễ hiểu với người vận hành, dễ demo và phù hợp với bản chất hỗ trợ quản lý rủi ro.
+
+
+\begin{table}[H]
+\centering
+\caption{Phân loại trạng thái Risk Monitoring}
+\begin{tabular}{|l|p{5cm}|p{5cm}|}
+\hline
+\textbf{Trạng thái} & \textbf{Điều kiện gợi ý} & \textbf{Hành động đề xuất} \\
+\hline
+Green & Hồ sơ đầy đủ, cập nhật đúng hạn, đơn hàng trong phạm vi công suất. & Tiếp tục theo dõi tự động, cập nhật dashboard định kỳ. \\
+\hline
+Yellow & Thiếu một số tài liệu, chậm cập nhật nhẹ, thời hạn giao hàng tương đối gấp. & Gửi nhắc nhở, yêu cầu bổ sung hồ sơ hoặc xác nhận lại với bên thu mua. \\
+\hline
+Red & Đơn hàng vượt công suất, chậm cập nhật nhiều lần, hồ sơ không rõ hoặc phản hồi chất lượng kém. & Chuyển sang kiểm tra thủ công, tạm dừng đề xuất hoặc yêu cầu thẩm định sâu. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Gift \& Impact Intelligence}
+
+Gift \& Impact Intelligence tập trung vào trải nghiệm người dùng cuối. Module này cá nhân hóa phần thưởng dựa trên thông tin sở thích, hành vi tương tác và nhóm sản phẩm OCOP mà người dùng quan tâm. Trong giai đoạn đầu, hệ thống có thể sử dụng onboarding quiz và phân nhóm đơn giản như ẩm thực, đồ uống, thủ công mỹ nghệ, chăm sóc sức khỏe hoặc quà tặng địa phương. Khi có đủ dữ liệu tương tác, hệ thống có thể cải thiện đề xuất bằng các phương pháp recommendation cơ bản.
+
+Impact Dashboard hiển thị kết quả chương trình theo ngôn ngữ dễ hiểu: số hồ sơ đã được chuẩn hóa, số hộ OCOP tham gia, số sản phẩm được kết nối, số đơn hàng đang theo dõi và câu chuyện nổi bật từ từng địa phương. Mục tiêu của dashboard là tạo cảm giác người dùng đang tham gia một chương trình có ý nghĩa, không phải chỉ nhận ưu đãi ngắn hạn.
+
+
+\subsection{Phạm vi MVP và trải nghiệm demo}
+
+Bản MVP của OCOP Pay cần thể hiện đầy đủ logic sản phẩm mà không phụ thuộc vào việc xử lý tiền thật hoặc tích hợp ngân hàng thật ngay từ đầu. Trọng tâm của MVP là chứng minh rằng nền tảng có thể nhận hồ sơ, chuẩn hóa dữ liệu, tính điểm phù hợp, tạo báo cáo giải thích và hiển thị tác động cho người dùng. Đây là các thành phần đủ để đánh giá tính khả thi kỹ thuật, trải nghiệm sản phẩm và tiềm năng ứng dụng trong ngân hàng số.
+
+\begin{itemize}
+    \item \textbf{Màn hình người dùng trẻ:} đăng ký tham gia OCOP Savings Program, chọn chủ đề tác động, xem tiến độ tiết kiệm mô phỏng, nhận gợi ý reward và xem Impact Card.
+    \item \textbf{Màn hình hộ OCOP:} nhập hồ sơ, tải chứng nhận, tải đơn hàng, kiểm tra trạng thái hồ sơ và nhận yêu cầu bổ sung nếu thiếu dữ liệu.
+    \item \textbf{Màn hình ngân hàng/đối tác vận hành:} xem danh sách hồ sơ, Match Score, Risk Flag, báo cáo AI và thao tác phê duyệt mô phỏng.
+    \item \textbf{Màn hình dashboard tổng hợp:} trình bày số liệu tác động, trạng thái chương trình, nhóm sản phẩm OCOP nổi bật và hiệu quả reward.
+\end{itemize}
+
+% --- Chừa chỗ cho sơ đồ kiến trúc MVP ---
+% \begin{figure}[H]
+%     \centering
+%     % \includegraphics[width=0.9\linewidth]{fig/mvp-architecture.png}
+%     \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}[Chèn sơ đồ kiến trúc MVP tại đây]\vspace{3cm}}}
+%     \caption{Kiến trúc MVP của OCOP Pay}
+%     \label{fig:mvp-architecture}
+% \end{figure}
+
+\subsection{Mô hình kinh doanh và cơ chế tạo giá trị}
+
+OCOP Pay phù hợp hơn với mô hình doanh thu B2B, trong đó ngân hàng hoặc đối tác triển khai trả phí cho việc sử dụng module công nghệ, dashboard và công cụ AI hỗ trợ vận hành. Cấu trúc doanh thu có thể bắt đầu bằng phí triển khai pilot, sau đó chuyển sang phí SaaS theo tháng hoặc theo quy mô chương trình. Trong giai đoạn mở rộng, nền tảng có thể bổ sung phí dịch vụ từ thương hiệu thu mua khi có kết nối đơn hàng thật và có giá trị thương mại rõ ràng.
+
+Phần thưởng cho người dùng có thể được tài trợ từ ngân sách marketing của ngân hàng, từ mẫu thử sản phẩm của hộ OCOP, từ chiến dịch hợp tác với thương hiệu hoặc từ ngân sách truyền thông địa phương. Điều quan trọng là chi phí reward phải được đo lường theo hiệu quả: tỷ lệ người dùng tham gia, tỷ lệ quay lại ứng dụng, tỷ lệ đổi thưởng, tỷ lệ chia sẻ Impact Card và mức độ hài lòng của người dùng.
+
+
+\begin{table}[H]
+\centering
+\caption{Mô hình kinh doanh và nguồn giá trị}
+\begin{tabular}{|p{3.5cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Nguồn giá trị} & \textbf{Cách triển khai} & \textbf{Chỉ số cần đo} \\
+\hline
+Ngân hàng số & Phí pilot, phí SaaS, phí tích hợp dashboard và module AI & Số người tham gia, DAU/MAU của chương trình, tỷ lệ quay lại, chi phí reward trên mỗi user \\
+\hline
+Thương hiệu thu mua & Phí kết nối hoặc phí dịch vụ khi có đơn hàng phù hợp & Số đơn hàng, tỷ lệ hoàn thành, thời gian tìm nguồn cung, chất lượng phản hồi \\
+\hline
+Hộ OCOP & Miễn phí hoặc phí rất thấp trong giai đoạn đầu để tăng nguồn cung hồ sơ & Số hồ sơ hoàn thiện, tỷ lệ được giới thiệu, số đơn hàng được theo dõi \\
+\hline
+Người dùng trẻ & Không thu phí trực tiếp; tạo giá trị qua reward và impact dashboard & Tỷ lệ tham gia, tỷ lệ đổi thưởng, tỷ lệ chia sẻ, khảo sát hài lòng \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Tính khả thi triển khai}
+
+\subsubsection{Dữ liệu và nhân lực hợp pháp}
+
+Nguồn dữ liệu của OCOP Pay được thiết kế theo hướng có sự đồng ý của các bên liên quan và không yêu cầu thu thập dữ liệu nhạy cảm vượt phạm vi cần thiết. Trong giai đoạn thử nghiệm, dữ liệu có thể bao gồm hồ sơ OCOP mẫu, chứng nhận mẫu, đơn hàng giả lập, danh mục sản phẩm OCOP công khai và dữ liệu tương tác người dùng được mô phỏng. Khi triển khai với đối tác thật, dữ liệu cần được phân tách theo vai trò: dữ liệu người dùng do ngân hàng quản lý, dữ liệu hồ sơ OCOP do hộ hoặc hợp tác xã cung cấp, dữ liệu đơn hàng do bên thu mua xác nhận.
+
+Nhân lực vận hành cũng được chia theo chức năng rõ ràng: bộ phận sản phẩm thiết kế luồng người dùng, bộ phận dữ liệu chuẩn hóa biểu mẫu, bộ phận kỹ thuật triển khai scoring và dashboard, bộ phận vận hành kiểm tra hồ sơ thiếu, và phía ngân hàng/đối tác chịu trách nhiệm thẩm định hoặc phê duyệt theo quy trình của họ. Cách chia này giúp giải pháp vận hành như một module hỗ trợ, không tạo cảm giác nền tảng tự đảm nhiệm toàn bộ chuỗi nghiệp vụ tài chính.
+
+\begin{table}[H]
+\centering
+\caption{Nguồn dữ liệu hợp pháp trong MVP}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Nhóm dữ liệu} & \textbf{Nguồn hợp pháp} & \textbf{Mức độ sử dụng trong MVP} \\
+\hline
+Hồ sơ OCOP & Hộ OCOP/HTX cung cấp hoặc dữ liệu mẫu được ẩn danh hóa. & Dùng để demo OCR, chuẩn hóa hồ sơ và Document Reliability. \\
+\hline
+Đơn hàng/nhu cầu thu mua & Đối tác thu mua cung cấp hoặc kịch bản đơn hàng mô phỏng. & Dùng để tính Order Fit, Timeline Fit và Capacity Fit. \\
+\hline
+Dữ liệu người dùng & Quiz sở thích và hành vi tương tác trong prototype; dữ liệu ngân hàng thật chỉ dùng khi có thỏa thuận. & Dùng để cá nhân hóa reward và đo engagement, không dùng để quyết định tín dụng. \\
+\hline
+Dữ liệu vận hành & Nhật ký cập nhật tiến độ, trạng thái hồ sơ, phản hồi từ người vận hành. & Dùng để tạo Risk Flag và dashboard quản trị. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Khả thi kỹ thuật build/deploy}
+
+Về kỹ thuật, OCOP Pay có thể bắt đầu bằng kiến trúc web-based hoặc mobile prototype thay vì hệ thống microservices phức tạp. Cấu phần tối thiểu gồm frontend cho ba nhóm người dùng, backend API, cơ sở dữ liệu quan hệ, scoring engine, OCR hoặc mô phỏng OCR, LLM/chatbot để tạo báo cáo giải thích và dashboard trực quan hóa. Cách triển khai này đủ để chứng minh bản chất AI-fintech của giải pháp mà không cần xử lý giao dịch thật.
+
+Khi cần nâng cấp, hệ thống có thể tách dần thành các service riêng: Profile Service cho hồ sơ OCOP, Matching Service cho scoring, Reward Service cho gợi ý phần thưởng, Impact Service cho dashboard và Audit Service cho nhật ký. Tuy nhiên trong giai đoạn đầu, việc giữ kiến trúc đơn giản giúp giảm rủi ro triển khai, dễ kiểm thử và dễ trình bày với ban giám khảo hoặc đối tác.
+
+
+\begin{table}[H]
+\centering
+\caption{Khả năng triển khai kỹ thuật và rủi ro}
+\begin{tabular}{|l|p{5cm}|p{5cm}|}
+\hline
+\textbf{Thành phần} & \textbf{Cách triển khai khả thi} & \textbf{Rủi ro} \\
+\hline
+Frontend & Web app responsive hoặc prototype mobile với 3 role: người dùng, hộ OCOP, ngân hàng. & Không cần xây app ngân hàng hoàn chỉnh; chỉ mô phỏng module tích hợp. \\
+\hline
+Backend/API & REST API xử lý hồ sơ, scoring, trạng thái, reward và dashboard. & Không xử lý tiền thật, không mô phỏng giao dịch tài chính nhạy cảm. \\
+\hline
+Database & PostgreSQL/MySQL hoặc file structured cho prototype; tách bảng users, profiles, orders, scores, rewards. & Không lưu dữ liệu ngân hàng thật nếu chưa có thỏa thuận. \\
+\hline
+AI/OCR & OCR cho tài liệu, rule-based scoring, LLM tạo báo cáo giải thích. & Không claim mô hình học sâu phức tạp nếu chưa có dữ liệu huấn luyện. \\
+\hline
+Dashboard & Biểu đồ số hồ sơ, trạng thái rủi ro, tỷ lệ đổi thưởng, impact card. & Không khẳng định tác động tài chính trực tiếp nếu chưa có pilot thật. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Chi phí hạ tầng và vận hành}
+
+Chi phí hạ tầng của OCOP Pay trong giai đoạn đầu có thể được kiểm soát ở mức thấp vì hệ thống chủ yếu xử lý hồ sơ, scoring có quy tắc và dashboard, chưa yêu cầu xử lý giao dịch thời gian thực ở quy mô lớn. Các chi phí chính gồm hosting ứng dụng, cơ sở dữ liệu, lưu trữ tài liệu, API OCR/LLM nếu sử dụng dịch vụ ngoài, và chi phí thiết kế reward thử nghiệm. Vì sản phẩm được định vị theo hướng B2B pilot, phần chi phí này có thể được trình bày như chi phí thử nghiệm công nghệ, không phải chi phí vận hành ngân hàng lõi.
+
+\begin{table}[H]
+\centering
+\caption{Chi phí hạ tầng và cách kiểm soát}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Hạng mục chi phí} & \textbf{Mức triển khai ban đầu} & \textbf{Cách kiểm soát} \\
+\hline
+Hosting và database & Một cloud instance nhỏ hoặc server dùng cho demo/pilot. & Giới hạn số người dùng, dùng autoscaling khi mở rộng, backup định kỳ. \\
+\hline
+Lưu trữ tài liệu & Lưu ảnh chứng nhận, hợp đồng, hồ sơ minh chứng. & Giới hạn dung lượng/tệp, nén file, xóa dữ liệu mẫu sau thử nghiệm. \\
+\hline
+OCR/LLM API & Gọi API cho tài liệu và báo cáo giải thích khi cần. & Cache kết quả OCR, giới hạn số lần tạo báo cáo, dùng mẫu prompt cố định. \\
+\hline
+Reward thử nghiệm & Voucher nhỏ, mẫu thử sản phẩm, ưu đãi mua hàng. & Đặt ngân sách theo chiến dịch, đo chi phí trên mỗi tương tác. \\
+\hline
+Vận hành hồ sơ & Nhân sự kiểm tra dữ liệu thiếu, phản hồi lỗi OCR, xác nhận trạng thái. & Chuẩn hóa form đầu vào, dùng checklist để giảm thao tác thủ công. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Bảo mật và pháp lý}
+
+OCOP Pay cần truyền thông rõ rằng người dùng gửi tiền tại ngân hàng, quyền lợi tiền gửi do ngân hàng quản lý, còn OCOP Pay chỉ cung cấp lớp trải nghiệm và công cụ dữ liệu. Tất cả dữ liệu cá nhân, dữ liệu giao dịch và dữ liệu hồ sơ OCOP cần được xử lý theo nguyên tắc tối thiểu hóa dữ liệu, có sự đồng ý của người dùng và cho phép người dùng xem, chỉnh sửa hoặc yêu cầu xóa thông tin trong phạm vi phù hợp.
+
+Ở cấp hệ thống, dữ liệu nên được phân quyền theo vai trò. Người dùng chỉ xem dữ liệu impact tổng hợp và thông tin reward của chính mình. Hộ OCOP chỉ xem hồ sơ và trạng thái của mình. Ngân hàng hoặc đối tác vận hành chỉ xem các hồ sơ được phân quyền trong chương trình. Toàn bộ thao tác đọc/ghi hồ sơ cần có audit log để truy vết khi cần. Điều này giúp tăng tính tin cậy cho giải pháp và phù hợp với bối cảnh dữ liệu tài chính - sản xuất có tính nhạy cảm.
+
+
+\subsection{Rủi ro chính và biện pháp kiểm soát}
+
+\begin{table}[H]
+\centering
+\caption{Rủi ro chính và biện pháp kiểm soát}
+\begin{tabular}{|p{4cm}|p{4cm}|p{6cm}|}
+\hline
+\textbf{Rủi ro} & \textbf{Tác động} & \textbf{Biện pháp kiểm soát} \\
+\hline
+Dữ liệu hồ sơ chưa đầy đủ & Điểm matching thiếu chính xác hoặc báo cáo không đủ tin cậy & Thiết kế trạng thái ``cần bổ sung'', không cho điểm tuyệt đối khi thiếu dữ liệu / chưa xác minh \\
+\hline
+AI bị hiểu nhầm là công cụ phê duyệt tín dụng & Tăng rủi ro pháp lý và kỳ vọng sai về sản phẩm & Quy định AI chỉ hỗ trợ phân tích; mọi quyết định do ngân hàng hoặc người vận hành có thẩm quyền thực hiện \\
+\hline
+Reward tạo chi phí cao & Khó duy trì nếu quy mô người dùng tăng nhanh & Bắt đầu bằng mẫu thử, voucher giới hạn, đo chi phí trên mỗi tương tác và tối ưu theo nhóm người dùng \\
+\hline
+Hộ OCOP cập nhật tiến độ không đều & Dashboard tác động thiếu dữ liệu mới & Dùng checklist kết hợp nhắc tự động, trạng thái Green/Yellow/Red và cơ chế xác nhận từ đối tác thu mua \\
+\hline
+Người dùng hiểu sai về tác động của khoản tiết kiệm & Ảnh hưởng niềm tin và truyền thông sản phẩm & Diễn đạt dashboard theo cấp chương trình, tránh khẳng định dòng tiền cá nhân được chuyển trực tiếp đến một hộ cụ thể \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Lộ trình phát triển}
+
+Lộ trình triển khai cần đi theo hướng tăng dần mức độ dữ liệu và mức độ tích hợp. Giai đoạn đầu tập trung vào chứng minh trải nghiệm và logic sản phẩm. Giai đoạn tiếp theo mở rộng pilot với một nhóm hộ OCOP, một số sản phẩm đại diện và một ngân hàng hoặc đối tác mô phỏng quy trình. Khi có dữ liệu thật, hệ thống mới nâng cấp các module recommendation, risk monitoring và báo cáo tác động.
+
+\begin{table}[H]
+\centering
+\caption{Lộ trình phát triển OCOP Pay}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Giai đoạn} & \textbf{Mục tiêu} & \textbf{Kết quả cần đạt} \\
+\hline
+Giai đoạn 1 - Prototype/MVP & Xây dựng giao diện người dùng, hồ sơ OCOP, scoring engine, báo cáo AI và impact dashboard. & Demo được 3 luồng: người dùng, hộ OCOP, ngân hàng/đối tác vận hành. \\
+\hline
+Giai đoạn 2 - Pilot giới hạn & Thử nghiệm với một nhóm sản phẩm OCOP và kịch bản đơn hàng đại diện. & Hoàn thiện tiêu chí scoring, đo tỷ lệ tương tác reward và phản hồi người dùng. \\
+\hline
+Giai đoạn 3 - Tích hợp đối tác & Kết nối sâu hơn với ngân hàng, đối tác thu mua hoặc API định danh/OCR. & Chuẩn hóa quy trình dữ liệu, báo cáo vận hành và cơ chế phân quyền. \\
+\hline
+Giai đoạn 4 - Mở rộng dữ liệu & Sử dụng dữ liệu tương tác thật để cải thiện recommendation, cảnh báo rủi ro và phân tích tác động. & Tối ưu mô hình doanh thu, dashboard ROI cho ngân hàng và báo cáo impact theo vùng/ngành. \\
+\hline
+\end{tabular}
+\end{table}
+
+Về GTM, OCOP Pay nên bắt đầu bằng một ngành hàng OCOP dễ kể câu chuyện và có vòng đời sản xuất ngắn như cà phê, trà, mật ong, thực phẩm khô hoặc quà tặng địa phương. Sau đó, nền tảng mở rộng sang các nhóm sản phẩm cần quản lý năng lực sản xuất chặt hơn. Cách đi này giúp giảm bài toán “nhiều bên cùng lúc” vì chương trình có thể khởi đầu từ một ngân hàng, một nhóm sản phẩm và một số đối tác thu mua mẫu trước khi mở rộng.
+
+\subsection{Tác động dự kiến}
+
+\subsubsection{Lợi ích xã hội}
+
+Tác động xã hội của OCOP Pay không nên được trình bày như việc nền tảng trực tiếp giải quyết toàn bộ bài toán vốn cho mọi hộ OCOP, mà là việc tạo ra một lớp chuẩn hóa hồ sơ và minh bạch thông tin giúp các chương trình hỗ trợ vốn có cơ sở vận hành tốt hơn. Khi hồ sơ của hộ OCOP được số hóa, đơn hàng được trình bày rõ, tiến độ được cập nhật và rủi ro được cảnh báo sớm, ngân hàng và đối tác có thêm căn cứ để xem xét hỗ trợ đúng đối tượng hơn.
+
+Đối với người dùng trẻ, tác động xã hội nằm ở việc họ có thể tham gia một chương trình tiết kiệm có ý nghĩa và theo dõi kết quả ở cấp chương trình. Điều này giúp chuyển trải nghiệm ngân hàng số từ một sản phẩm giao dịch đơn thuần sang một hành vi tài chính có trách nhiệm. Đối với địa phương và hộ sản xuất, nền tảng góp phần thúc đẩy số hóa hồ sơ, nâng cao năng lực trình bày sản phẩm và tăng khả năng kết nối với thị trường.
+
+\begin{table}[H]
+\centering
+\caption{Đo lường tác động xã hội trong giai đoạn thử nghiệm}
+\begin{tabular}{|p{3.5cm}|p{6cm}|p{5cm}|}
+\hline
+\textbf{Nhóm tác động} & \textbf{Biểu hiện có thể đo} & \textbf{Cách đo trong pilot} \\
+\hline
+Số hóa hồ sơ OCOP & Số hồ sơ được tạo, tỷ lệ hồ sơ đầy đủ, số giấy tờ OCR thành công. & Dashboard vận hành hồ sơ, log upload và trạng thái xác minh. \\
+\hline
+Hỗ trợ kết nối vốn/ngân hàng & Số hồ sơ được đề xuất tiếp tục thẩm định, số hồ sơ cần bổ sung, thời gian sàng lọc ban đầu. & Báo cáo Match Score và trạng thái xử lý của người vận hành. \\
+\hline
+Kết nối thị trường & Số đơn hàng được theo dõi, số sản phẩm vào danh mục, số phản hồi từ bên thu mua. & Module đơn hàng và phản hồi đối tác. \\
+\hline
+Gắn kết người dùng trẻ & Tỷ lệ vào dashboard, tỷ lệ đổi reward, tỷ lệ chia sẻ Impact Card. & Analytics sự kiện người dùng trong ứng dụng. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Lợi ích kinh doanh}
+
+Lợi ích kinh doanh của OCOP Pay tập trung vào ba hướng: tăng tương tác cho ngân hàng số, tạo công cụ tiền thẩm định cho các hồ sơ OCOP, và mở cơ hội kết nối B2B cho thương hiệu thu mua. Với ngân hàng, sản phẩm tạo câu chuyện khác biệt để thu hút người dùng trẻ và có thêm dữ liệu về mức độ quan tâm của khách hàng đối với chương trình xã hội. Với hộ OCOP, việc chuẩn hóa hồ sơ giúp giảm ma sát khi tiếp cận các chương trình tài chính hoặc đơn hàng. Với thương hiệu, nền tảng giúp tiết kiệm thời gian tìm nguồn cung và tăng độ tin cậy của dữ liệu nhà cung cấp.
+
+Các chỉ số kinh doanh nên được đo theo từng nhóm thay vì chỉ tập trung vào số dư tiết kiệm. Ở giai đoạn đầu, các chỉ số phù hợp gồm số người tham gia chương trình, tỷ lệ quay lại dashboard, tỷ lệ hoàn thiện hồ sơ OCOP, số báo cáo AI được tạo, tỷ lệ hồ sơ được yêu cầu bổ sung, thời gian xử lý hồ sơ ban đầu và chi phí reward trên mỗi người dùng tương tác. Đây là những chỉ số có thể đo được trong pilot và phản ánh rõ giá trị sản phẩm.
+
+\subsubsection{TAM-SAM-SOM và người dùng tiềm năng}
+
+Để tránh phóng đại quy mô thị trường, OCOP Pay nên tính TAM-SAM-SOM theo hướng bottom-up dựa trên khách hàng trả tiền thực tế là ngân hàng số và đối tác triển khai, thay vì lấy toàn bộ người dùng ngân hàng số làm thị trường trực tiếp. Người dùng trẻ là đối tượng sử dụng cuối và tạo engagement, nhưng nguồn doanh thu chính trong giai đoạn đầu đến từ ngân hàng/đối tác trả phí pilot hoặc SaaS.
+
+\begin{table}[H]
+\centering
+\caption{Phân tích TAM-SAM-SOM và người dùng tiềm năng}
+\begin{tabular}{|p{3cm}|p{6cm}|p{6cm}|}
+\hline
+\textbf{Lớp thị trường} & \textbf{Cách hiểu phù hợp} & \textbf{Cách ước tính thận trọng} \\
+\hline
+TAM & Thị trường giải pháp AI/B2B SaaS hỗ trợ ngân hàng số triển khai chương trình ESG/impact engagement. & Số ngân hàng số hoặc ngân hàng có app số phù hợp $\times$ mức chi trả SaaS/năm cho một module pilot. \\
+\hline
+SAM & Phần thị trường có thể tiếp cận trong 2--3 năm đầu. & Một số ngân hàng/đối tác có nhu cầu thử nghiệm sản phẩm khách hàng trẻ, cộng thêm nhóm thương hiệu thu mua quan tâm nguồn cung OCOP. \\
+\hline
+SOM & Phần thị trường có thể đạt được ở giai đoạn đầu. & 1--2 pilot ngân hàng/đối tác, số người dùng tham gia giới hạn, số hồ sơ OCOP và đơn hàng được theo dõi trong phạm vi thử nghiệm. \\
+\hline
+Người dùng tiềm năng & Người trẻ dùng ngân hàng số, quan tâm tiết kiệm, ưu đãi và câu chuyện tiêu dùng có trách nhiệm. & Đo bằng số người tham gia chương trình, tỷ lệ quay lại, tỷ lệ hoàn tất quiz, tỷ lệ xem Impact Card. \\
+\hline
+\end{tabular}
+\end{table}
+
+Cách tính này phù hợp hơn vì phản ánh đúng mô hình kinh doanh B2B của OCOP Pay. Thay vì khẳng định quy mô thị trường quá lớn, báo cáo nên nhấn mạnh rằng sản phẩm có thể bắt đầu từ các pilot nhỏ, đo lường hiệu quả engagement và mở rộng dần khi có bằng chứng về giá trị.
+
+\subsubsection{Ưu thế cạnh tranh}
+
+Ưu thế cạnh tranh của OCOP Pay không nằm ở việc sở hữu công nghệ AI quá phức tạp, vì OCR, chatbot, dashboard hay recommendation đều là các công nghệ có thể được triển khai bởi nhiều đơn vị. Điểm khác biệt cần nhấn mạnh là cách đóng gói các công nghệ này thành một luồng sản phẩm cụ thể cho ngân hàng số: từ chương trình tiết kiệm có mục đích, hồ sơ OCOP số hóa, matching có giải thích, risk flag, reward cá nhân hóa đến dashboard tác động.
+
+Trong giai đoạn đầu, lợi thế có thể đến từ khả năng thiết kế use case rõ ràng, khả năng kết nối đúng ba nhóm dữ liệu và khả năng biến tác động xã hội thành trải nghiệm người dùng đo được. Khi có pilot thật, lợi thế tích lũy mới nằm ở dữ liệu vận hành: loại hồ sơ nào thường thiếu, tiêu chí nào ảnh hưởng đến matching, reward nào tạo tương tác tốt hơn, nhóm sản phẩm nào phù hợp với người dùng trẻ và đối tác thu mua nào phản hồi tốt. Đây là lợi thế dữ liệu thực tế hơn so với việc tuyên bố có ``bộ dữ liệu độc quyền'' ngay từ đầu.
+
+\begin{table}[H]
+\centering
+\caption{Các nguồn ưu thế cạnh tranh của OCOP Pay}
+\begin{tabular}{|p{3cm}|p{6cm}|p{6cm}|}
+\hline
+\textbf{Nguồn lợi thế} & \textbf{Cách thể hiện trong OCOP Pay} & \textbf{Điều kiện để duy trì} \\
+\hline
+Use case cụ thể & Tập trung vào ngân hàng số, người trẻ và hồ sơ OCOP có đơn hàng rõ ràng. & Không mở rộng quá rộng trước khi chứng minh được luồng cốt lõi. \\
+\hline
+Luồng dữ liệu đa bên & Kết nối dữ liệu người dùng, hồ sơ OCOP, đơn hàng và reward/impact. & Thiết kế biểu mẫu chuẩn, phân quyền dữ liệu và đo lường nhất quán. \\
+\hline
+AI giải thích được & Match Score kèm lý do, Risk Flag kèm trạng thái, báo cáo ngắn cho người thẩm định. & Ưu tiên minh bạch, có log và không để AI tự quyết định. \\
+\hline
+Trải nghiệm impact & Impact Card, dashboard tác động, câu chuyện sản phẩm địa phương. & Nội dung minh bạch, tránh gây hiểu nhầm về dòng tiền cá nhân. \\
+\hline
+\end{tabular}
+\end{table}
+%=========================
+\section{TRIỂN KHAI VÀ TÁC ĐỘNG}
+%=========================
+
+\subsection{MVP và kịch bản Demo}
+
+\subsubsection{Mục tiêu MVP}
+
+MVP của OCOP Pay được xây dựng nhằm chứng minh một vòng lặp giá trị tối thiểu giữa người trẻ -- ngân hàng số -- hộ OCOP -- buyer B2B.
+
+OCOP Pay không được triển khai như một ngân hàng, quỹ đầu tư hay đơn vị huy động vốn. Trong MVP, sản phẩm được định vị là AI orchestration layer tích hợp vào ngân hàng số.
+
+\textbf{Thông điệp trọng tâm:}
+\begin{quote}
+OCOP Pay không yêu cầu người trẻ thay đổi hành vi tiêu dùng; chúng tôi chỉ thay đổi ý nghĩa của hành vi tiết kiệm đã có sẵn.
+\end{quote}
+
+Vòng lặp MVP cần chứng minh:
+\begin{quote}
+Người trẻ gửi tiết kiệm tại ngân hàng $\rightarrow$ OCOP Pay gợi ý hộ OCOP có đơn hàng phù hợp $\rightarrow$ ngân hàng sandbox mô phỏng cấp vốn $\rightarrow$ hộ OCOP cập nhật tiến độ $\rightarrow$ buyer xác nhận thu mua $\rightarrow$ người trẻ nhận reward cá nhân hóa $\rightarrow$ hệ thống tạo Impact Card.
+\end{quote}
+
+\subsubsection{Phạm vi MVP}
+
+\begin{table}[H]
+\centering
+\caption{Phạm vi MVP của OCOP Pay}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+\textbf{Thành phần} & \textbf{Phạm vi triển khai} \\
+\hline
+Người dùng mẫu & Lan, 24 tuổi, có thói quen gửi tiết kiệm nhỏ \\
+\hline
+Sản phẩm ngân hàng & Gói tiết kiệm OCOP Impact, mô phỏng bằng sandbox \\
+\hline
+Hộ OCOP mẫu & HTX Cà phê Cầu Đất \\
+\hline
+Buyer B2B & Cửa hàng / chuỗi F\&B giả lập \\
+\hline
+Đơn hàng mẫu & 50kg cà phê rang xay \\
+\hline
+AI chính & AI Matchmaker, Risk Intelligence, Gift Intelligence, Impact Intelligence \\
+\hline
+Kết quả demo & Dashboard, Match Score, Risk Alert, Reward, Impact Card \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Phân định thành phần thật và mô phỏng}
+
+Để đảm bảo tính khả thi và tránh rủi ro pháp lý, MVP phân tách rõ phần được xây dựng thật và phần chỉ mô phỏng.
+
+\begin{table}[H]
+\centering
+\caption{Phân định thành phần thật và mô phỏng trong MVP}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{5cm}|}
+\hline
+\textbf{Thành phần} & \textbf{Trạng thái trong MVP} & \textbf{Ghi chú} \\
+\hline
+UI/UX, dashboard, Impact Card & Xây thật & Figma hoặc web prototype \\
+\hline
+AI Matchmaker & Xây ở mức demo & Rule-based scoring + LLM explanation \\
+\hline
+Gift Intelligence & Xây ở mức demo & Gợi ý reward theo hành vi giả lập \\
+\hline
+Risk Intelligence & Xây ở mức demo & Cảnh báo chậm tiến độ hoặc thiếu xác nhận \\
+\hline
+Supply Chain Tracker & Xây ở mức demo & Theo dõi trạng thái sản xuất -- thu mua \\
+\hline
+Tiền gửi ngân hàng & Mô phỏng & Không xử lý tiền thật \\
+\hline
+Giải ngân vốn & Mô phỏng & Dùng sandbox / mock data \\
+\hline
+Buyer thu mua & Mô phỏng & Buyer B2B giả lập \\
+\hline
+Rủi ro tín dụng & Không xử lý trong MVP & Thuộc ngân hàng khi triển khai thật \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Legal Safety Statement:}
+\begin{quote}
+OCOP Pay không huy động vốn, không giữ tiền người dùng, không trực tiếp cho vay và không tự quyết định tín dụng. Mọi nghiệp vụ tiền gửi, khoản vay, lãi suất và quản trị rủi ro thuộc ngân hàng đối tác. OCOP Pay chỉ cung cấp lớp công nghệ hỗ trợ AI recommendation, dashboard, tracking, risk alert và báo cáo tác động.
+\end{quote}
+
+\subsubsection{Cách tiếp cận AI trong MVP}
+
+Trong MVP, OCOP Pay sử dụng hybrid AI: rule-based scoring kết hợp LLM explanation.
+
+\textbf{AI Scope Clarity -- Bốn vai trò AI có thể demo:}
+
+\begin{table}[H]
+\centering
+\caption{Vai trò AI trong MVP}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Vai trò AI} & \textbf{Ý nghĩa} \\
+\hline
+Xếp hạng & Gợi ý hộ OCOP phù hợp với đơn hàng và bối cảnh tiết kiệm \\
+\hline
+Giải thích & Nêu lý do vì sao hệ thống đề xuất hộ OCOP đó \\
+\hline
+Cảnh báo & Phát hiện rủi ro trễ tiến độ, thiếu xác nhận, mismatch kỳ hạn \\
+\hline
+Cá nhân hóa & Gợi ý reward phù hợp với hồ sơ người dùng \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Công thức Match Score trong MVP:}
+\[
+\text{Match Score} = 25\%\ \text{Order Fit} + 25\%\ \text{Capacity Fit} + 20\%\ \text{Timeline Fit} + 15\%\ \text{Document Reliability} + 15\%\ \text{Risk Signal}
+\]
+
+\begin{table}[H]
+\centering
+\caption{Công thức Match Score chi tiết}
+\begin{tabular}{|p{3.5cm}|p{2cm}|p{8cm}|}
+\hline
+\textbf{Thành phần} & \textbf{Trọng số} & \textbf{Ý nghĩa} \\
+\hline
+Order Fit & 25\% & Sản phẩm OCOP có phù hợp nhu cầu buyer không \\
+\hline
+Production Capacity & 25\% & Hộ OCOP có đủ năng lực sản xuất không \\
+\hline
+Timeline Fit & 20\% & Thời gian sản xuất có phù hợp kỳ hạn vốn không \\
+\hline
+Risk Score & 15\% & Có rủi ro trễ hạn, thiếu dữ liệu, thiếu xác nhận không \\
+\hline
+User--Reward Fit & 15\% & Reward có phù hợp hồ sơ người dùng không \\
+\hline
+\textbf{Tổng} & 100\% & Điểm phù hợp tổng thể để hệ thống đề xuất \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Kịch bản Demo 3 phút}
+
+\begin{table}[H]
+\centering
+\caption{Kịch bản Demo 3 phút}
+\begin{tabular}{|p{2cm}|p{6cm}|p{5cm}|}
+\hline
+\textbf{Thời lượng} & \textbf{Nội dung demo} & \textbf{Giá trị thể hiện} \\
+\hline
+0:00--0:30 & Nêu vấn đề: ngân hàng thiếu khác biệt, OCOP thiếu vốn và đơn hàng dự báo & Pain point rõ \\
+\hline
+0:30--1:00 & Lan gửi 2.000.000đ vào OCOP Impact Savings & Không thay đổi hành vi người dùng \\
+\hline
+1:00--1:40 & AI Matchmaker chọn HTX Cà phê Cầu Đất và giải thích Match Score & AI điều phối có giải thích \\
+\hline
+1:40--2:15 & Supply Chain Tracker hiển thị tiến độ 65\% và Risk Alert & Theo dõi vận hành \\
+\hline
+2:15--2:40 & Buyer xác nhận thu mua, Gift Intelligence đề xuất reward & Reward cá nhân hóa \\
+\hline
+2:40--3:00 & Tạo Impact Card và kết luận vòng lặp & Retention và tác động xã hội \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Thông điệp kết demo:}
+\begin{quote}
+OCOP Pay không yêu cầu người trẻ mua OCOP hay quyên góp. Người dùng chỉ gửi tiết kiệm như bình thường; AI điều phối phần còn lại để tạo giá trị cho ngân hàng, hộ OCOP và buyer B2B.
+\end{quote}
+
+\subsubsection{Demo Acceptance Criteria}
+
+\begin{table}[H]
+\centering
+\caption{Tiêu chí nghiệm thu Demo}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+\textbf{Tiêu chí} & \textbf{Mức đạt} \\
+\hline
+Demo end-to-end & Hoàn thành trong 3 phút \\
+\hline
+AI Matchmaker & Có Match Score và lý do đề xuất \\
+\hline
+Risk Alert & Có ít nhất 1 cảnh báo rủi ro \\
+\hline
+Dashboard & Hiển thị hộ OCOP, đơn hàng, tiến độ, reward \\
+\hline
+Impact Card & Tạo được card sau vòng lặp \\
+\hline
+Tính ổn định & Chạy thành công tối thiểu 3 lần liên tục \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Lộ trình triển khai}
+
+Lộ trình triển khai được thiết kế trong 01 tháng Hackathon, theo 04 giai đoạn: Prototype $\rightarrow$ Pilot $\rightarrow$ Mở rộng $\rightarrow$ Thương mại hóa.
+
+\subsubsection{Tổng hợp lộ trình}
+
+\begin{table}[H]
+\centering
+\caption{Tổng hợp lộ trình triển khai 4 tuần}
+\begin{tabular}{|p{2.5cm}|p{2cm}|p{4cm}|p{3cm}|p{2.5cm}|}
+\hline
+\textbf{Giai đoạn} & \textbf{Thời gian} & \textbf{Mục tiêu} & \textbf{Đầu ra chính} & \textbf{KPI hoàn thành} \\
+\hline
+Prototype & Tuần 1 & Chốt use case và dữ liệu & Wireframe, user journey, mock data & Giải thích mô hình <60 giây \\
+\hline
+Pilot & Tuần 2 & Kiểm thử prototype với người dùng nhỏ & Figma/web prototype, feedback & $\geq$60\% người thử hiểu mô hình \\
+\hline
+Mở rộng & Tuần 3 & Hoàn thiện MVP có AI end-to-end & AI Matchmaker, Tracker, Impact Card & Demo chạy ổn định $\geq$3 lần \\
+\hline
+Thương mại hóa & Tuần 4 & Đóng gói hồ sơ và GTM & Proposal, pitch deck, demo video, Q\&A & BGK hiểu sản phẩm trong 1 phút \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Giai đoạn Prototype -- Tuần 1}
+
+Hoạt động chính:
+\begin{itemize}
+    \item Chốt use case demo: Lan gửi tiết kiệm $\rightarrow$ HTX Cà phê Cầu Đất $\rightarrow$ buyer F\&B $\rightarrow$ reward cà phê.
+    \item Xây dữ liệu mẫu: 10 người dùng, 10 hộ OCOP, 5 buyer, 20 sản phẩm, 10 đơn hàng.
+    \item Thiết kế user journey và wireframe.
+    \item Viết demo script 3 phút.
+    \item Chuẩn hóa thông điệp pháp lý: OCOP Pay là AI layer, không phải ngân hàng.
+\end{itemize}
+
+\subsubsection{Giai đoạn Pilot -- Tuần 2}
+
+Hoạt động chính:
+\begin{itemize}
+    \item Xây Figma hoặc web prototype.
+    \item Kiểm thử nhanh với 20--30 người trẻ.
+    \item Đo 04 chỉ số: mức độ hiểu mô hình; độ hấp dẫn của reward; độ tin tưởng dashboard; độ rõ của giải thích AI.
+    \item Cải tiến onboarding để người dùng hiểu mô hình trong dưới 60 giây.
+\end{itemize}
+
+\subsubsection{Giai đoạn Mở rộng -- Tuần 3}
+
+Hoạt động chính:
+\begin{itemize}
+    \item Mở rộng dữ liệu demo: 50 người dùng, 30 hộ OCOP, 10 buyer, 100 sản phẩm, 30 đơn hàng.
+    \item Hoàn thiện 04 module AI: AI Matchmaker, Risk Intelligence, Gift Intelligence, Impact Intelligence.
+    \item Tích hợp hoặc mô phỏng API VNPT: eKYC, Smartbot, SmartReader OCR, vnSocial, SmartVoice, SmartUX.
+    \item Hoàn thiện luồng demo end-to-end.
+\end{itemize}
+
+\subsubsection{Giai đoạn Thương mại hóa -- Tuần 4}
+
+Hoạt động chính:
+\begin{itemize}
+    \item Hoàn thiện proposal, pitch deck, demo script và video demo 2--3 phút.
+    \item Chuẩn bị Q\&A phản biện (OCOP Pay có phải ngân hàng không? Ai chịu rủi ro tín dụng? v.v.)
+    \item Xây GTM package cho ngân hàng/fintech pilot.
+\end{itemize}
+
+\subsubsection{Fallback Plan}
+
+\begin{table}[H]
+\centering
+\caption{Phương án dự phòng khi gặp rủi ro triển khai}
+\begin{tabular}{|p{5cm}|p{8cm}|}
+\hline
+\textbf{Rủi ro} & \textbf{Phương án dự phòng} \\
+\hline
+Không kịp tích hợp API VNPT & Dùng mock API và ghi rõ phần mô phỏng \\
+\hline
+Web app chưa ổn định & Dùng Figma prototype có luồng click-through \\
+\hline
+AI scoring chưa hoàn thiện & Dùng rule-based scoring có giải thích \\
+\hline
+Không có buyer thật & Dùng buyer giả lập; sau Hackathon pilot với buyer nhỏ \\
+\hline
+Không có dữ liệu ngân hàng thật & Dùng sandbox/mock data \\
+\hline
+Không đủ thời gian quay video & Ưu tiên demo trực tiếp + slide flow rõ ràng \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Chiến lược Go-to-Market}
+
+\subsubsection{Định vị thị trường}
+
+OCOP Pay được định vị là:
+\begin{quote}
+AI layer cho ngân hàng số, giúp biến sản phẩm tiết kiệm thông thường thành sản phẩm tiết kiệm có tác động, đồng thời tạo dữ liệu mới cho tín dụng OCOP/SME và báo cáo ESG.
+\end{quote}
+
+\subsubsection{GTM Sequence}
+
+OCOP Pay không onboard tất cả các bên cùng lúc. Giai đoạn đầu đi theo trình tự:
+\begin{quote}
+Buyer nhỏ $\rightarrow$ hộ OCOP phù hợp $\rightarrow$ ngân hàng sandbox $\rightarrow$ người dùng trẻ
+\end{quote}
+
+\subsubsection{Khách hàng mục tiêu ban đầu}
+
+\begin{table}[H]
+\centering
+\caption{Khách hàng mục tiêu và giá trị OCOP Pay tương ứng}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Nhóm} & \textbf{Nhu cầu} & \textbf{Giá trị OCOP Pay} \\
+\hline
+Ngân hàng số / fintech & Tăng retention, tăng tiền gửi, ESG đo được & AI layer, dashboard, dữ liệu OCOP \\
+\hline
+Người trẻ 18--35 & Tiết kiệm có ý nghĩa, reward phù hợp & Impact Savings, Impact Card \\
+\hline
+Hộ OCOP & Vốn lưu động, đơn hàng dự báo & Matching với ngân hàng và buyer \\
+\hline
+Buyer B2B & Nguồn hàng địa phương có truy xuất & Supply tracker, sustainability report \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Kế hoạch hợp tác ngân hàng}
+
+\begin{table}[H]
+\centering
+\caption{Lộ trình hợp tác ngân hàng}
+\begin{tabular}{|p{3cm}|p{4cm}|p{6cm}|}
+\hline
+\textbf{Giai đoạn} & \textbf{Mục tiêu} & \textbf{Hoạt động} \\
+\hline
+Sandbox Demo & Chứng minh trải nghiệm & Demo 1 người dùng, 1 hộ OCOP, 1 đơn hàng \\
+\hline
+Pilot không tiền thật & Kiểm thử UX và AI & Dữ liệu giả lập / sandbox \\
+\hline
+Pilot giới hạn & Kiểm chứng thị trường & 500--1.000 người dùng, reward thử nghiệm \\
+\hline
+Tích hợp chính thức & Thương mại hóa & Tích hợp module vào app ngân hàng \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Mô hình doanh thu}
+
+\begin{table}[H]
+\centering
+\caption{Mô hình doanh thu OCOP Pay}
+\begin{tabular}{|p{5cm}|p{9cm}|}
+\hline
+\textbf{Nguồn doanh thu} & \textbf{Mô tả} \\
+\hline
+Phí SaaS từ ngân hàng & Ngân hàng trả phí dùng AI layer \\
+\hline
+Phí triển khai dashboard / API & Tùy chỉnh theo từng ngân hàng \\
+\hline
+Phí theo active user & Dựa trên số người dùng tham gia \\
+\hline
+Phí ESG report & Buyer / ngân hàng trả phí báo cáo tác động \\
+\hline
+Phí dữ liệu tổng hợp & Báo cáo xu hướng OCOP, không định danh cá nhân \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Pilot Business Case}
+
+\begin{table}[H]
+\centering
+\caption{Business Case cho giai đoạn Pilot 3 tháng}
+\begin{tabular}{|p{5cm}|p{8cm}|}
+\hline
+\textbf{Chỉ số} & \textbf{Giả định pilot 3 tháng} \\
+\hline
+Người dùng thử & 500--1.000 \\
+\hline
+Hộ OCOP tham gia & 10--20 \\
+\hline
+Buyer nhỏ & 2--3 \\
+\hline
+Ngân hàng / fintech & 1 sandbox partner \\
+\hline
+Phí triển khai pilot & 20--50 triệu VNĐ \\
+\hline
+Phí SaaS pilot & 5--10 triệu VNĐ/tháng \\
+\hline
+Chi phí vận hành MVP & Chi phí kỹ thuật: 2--5 triệu VNĐ/tháng; Chi phí reward: không vượt 20--30\% doanh thu pilot \\
+\hline
+Break-even pilot & 1 ngân hàng trả phí triển khai + SaaS \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Critical Assumptions và Validation Plan}
+
+\begin{table}[H]
+\centering
+\caption{Giả định và kế hoạch kiểm chứng}
+\begin{tabular}{|p{5cm}|p{3.5cm}|p{4.5cm}|}
+\hline
+\textbf{Giả định} & \textbf{Rủi ro nếu sai} & \textbf{Cách kiểm chứng} \\
+\hline
+Người trẻ quan tâm tiết kiệm có tác động & Adoption thấp & Test onboarding với 20--30 người trẻ \\
+\hline
+Reward cá nhân hóa hấp dẫn hơn voucher ngẫu nhiên & Retention thấp & A/B test reward \\
+\hline
+Ngân hàng cần sản phẩm ESG có dữ liệu & Khó bán B2B & Pitch sandbox cho 1 ngân hàng / fintech \\
+\hline
+Hộ OCOP cần vốn và đơn hàng dự báo & Thiếu phía cung & Phỏng vấn 5--10 hộ OCOP \\
+\hline
+Buyer cần nguồn hàng có truy xuất & Vòng lặp không khép kín & Làm việc với 1--2 buyer nhỏ \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Baseline Comparison}
+
+\begin{table}[H]
+\centering
+\caption{So sánh OCOP Pay với các giải pháp hiện tại}
+\begin{tabular}{|p{4cm}|p{2.5cm}|p{2.5cm}|p{4cm}|}
+\hline
+\textbf{Tiêu chí} & \textbf{Cashback ngân hàng} & \textbf{App mua sắm OCOP} & \textbf{OCOP Pay} \\
+\hline
+Người dùng phải đổi hành vi & Thấp & Cao & Thấp \\
+\hline
+Tạo vốn cho OCOP & Không & Không rõ & Có, qua ngân hàng \\
+\hline
+Có đơn hàng dự báo & Không & Không & Có, qua buyer \\
+\hline
+Có AI điều phối đa bên & Không & Thấp & Có \\
+\hline
+Tăng retention ngân hàng & Ngắn hạn & Không liên quan & Dài hạn qua Impact History \\
+\hline
+Rủi ro pháp lý & Thấp & Thấp & Trung bình, kiểm soát bằng mô hình không chạm tiền \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{KPI trọng tâm}
+
+\textbf{North Star Metric:} số vòng lặp hoàn chỉnh mỗi tháng.
+
+Một vòng lặp hoàn chỉnh gồm: Người trẻ gửi tiết kiệm $\rightarrow$ ngân hàng xem đề xuất $\rightarrow$ hộ OCOP sản xuất $\rightarrow$ buyer xác nhận $\rightarrow$ người trẻ nhận reward.
+
+\begin{table}[H]
+\centering
+\caption{KPI trọng tâm}
+\begin{tabular}{|p{5cm}|p{3.5cm}|p{4.5cm}|}
+\hline
+\textbf{KPI} & \textbf{Trong Hackathon} & \textbf{6--12 tháng sau} \\
+\hline
+Vòng lặp demo / thử nghiệm & 1 end-to-end & 100--300 \\
+\hline
+Người dùng thử có tương tác & 20--30 & 1.000--3.000 \\
+\hline
+Hộ OCOP trong dữ liệu & 10--30 & 30--50 \\
+\hline
+Buyer B2B & 1 giả lập & 3--5 buyer nhỏ \\
+\hline
+Ngân hàng / fintech & Sandbox / mock & 1 đối tác pilot \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Tác động dự kiến và KPI thành công}
+
+\begin{table}[H]
+\centering
+\caption{Tác động dự kiến và KPI năm 1}
+\begin{tabular}{|p{2cm}|p{5cm}|p{6.5cm}|}
+\hline
+\textbf{Đối tượng} & \textbf{Tác động chính} & \textbf{KPI năm 1} \\
+\hline
+Người trẻ & Tiết kiệm có mục đích, thấy tiền của mình đang tạo tác động; nhận reward cá nhân hóa nhưng không bị ép mua OCOP. & 5.000 đăng ký pilot; 1.000 MAU; retention 30 ngày $\geq$ 25\%; $\geq$ 35\% mở dashboard/tuần; 500 Impact Card được chia sẻ. \\
+\hline
+Ngân hàng & Có sản phẩm tiết kiệm gắn tác động xã hội/ESG, tăng engagement nhóm trẻ và có thêm hồ sơ OCOP đã sàng lọc. & 1 ngân hàng/sandbox partner; 1--3 tỷ VNĐ số dư gắn nhãn nếu pilot thật; +10--15\% tần suất mở app; 30--50 hồ sơ OCOP. \\
+\hline
+Hộ OCOP & Tiếp cận vốn gắn với đầu ra, đơn hàng dự báo và hồ sơ số; giảm rủi ro vay xong không bán được hàng. & 30--50 hồ sơ số; 5--8 hộ pilot thật; 5--10 đơn B2B; 100--300 triệu VNĐ giá trị đơn thử nghiệm; giao đúng hạn $\geq$ 85\%; 10--20 lô có QR. \\
+\hline
+Xã hội \& B2B & Tạo vòng lặp tài chính tuần hoàn địa phương. & 2--3 địa phương; 3 nhóm ngành hàng; 1--2 đối tác thu mua; 20.000 lượt tiếp cận; 1.000 báo cáo impact cá nhân; 3 case study. \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{KPI tổng hợp năm 1 theo trụ cột}
+\begin{tabular}{|p{3cm}|p{10cm}|}
+\hline
+\textbf{Trụ cột} & \textbf{Mục tiêu đo được} \\
+\hline
+Sản phẩm & Hoàn thành MVP web app gồm dashboard người trẻ, portal hộ OCOP, portal B2B và AI matching demo. \\
+\hline
+AI \& dữ liệu & Matching được human đánh giá $\geq$ 70\%; LLM chỉ tóm tắt/giải thích/gợi ý, không tự quyết định tín dụng; 100\% hồ sơ vay có người kiểm duyệt. \\
+\hline
+Tài chính & Doanh thu thử nghiệm 30--100 triệu VNĐ từ phí SaaS/pilot/phí kết nối; reward không vượt 20--30\% doanh thu pilot. \\
+\hline
+Thị trường/SOM pilot & 5.000 người dùng trẻ, 30--50 hộ OCOP, 1--2 đối tác thu mua, 5--10 đơn hàng thử nghiệm. \\
+\hline
+Rủi ro & OCOP Pay không giữ tiền người dùng, không cấp vay, không cam kết lợi nhuận đầu tư; mọi dòng tiền qua ngân hàng đối tác. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Rủi ro và phương án kiểm soát}
+
+\begin{table}[H]
+\centering
+\caption{Rủi ro và phương án kiểm soát chi tiết}
+\begin{tabular}{|p{3.5cm}|p{1.5cm}|p{8cm}|}
+\hline
+\textbf{Rủi ro} & \textbf{Mức độ} & \textbf{Phương án kiểm soát} \\
+\hline
+Bị hiểu nhầm là tổ chức tài chính/quỹ đầu tư & Cao & Ghi rõ OCOP Pay không giữ tiền, không cấp vay, không cam kết lợi nhuận; tài khoản tiết kiệm và khoản vay thuộc ngân hàng đối tác. \\
+\hline
+Vi phạm dữ liệu cá nhân & Cao & Consent rõ ràng; chỉ thu dữ liệu tối thiểu để gợi ý reward/matching; mã hóa dữ liệu; cho phép rút lại đồng ý; không bán dữ liệu cho bên thứ ba. \\
+\hline
+AI matching sai hoặc bị hiểu là chấm điểm tín dụng tự động & Cao & Dùng hybrid rule-based + LLM + human review; AI chỉ xếp hạng/gợi ý; mọi hồ sơ tín dụng có nhân viên ngân hàng kiểm duyệt cuối cùng. \\
+\hline
+LLM bịa thông tin impact/ESG & Trung bình & Thông tin quan trọng lấy từ dữ liệu có cấu trúc. LLM chỉ viết lại/tóm tắt, không tự tạo số liệu. \\
+\hline
+Hộ OCOP giao hàng trễ hoặc chất lượng không đều & Trung bình & Năm đầu chỉ chọn 5--8 hộ ổn định; ưu tiên cà phê, mật ong, gạo/đặc sản khô; có cảnh báo sớm và hộ dự phòng. \\
+\hline
+Reward tốn tiền hơn giá trị tạo ra & Trung bình & Reward đến từ voucher đồng tài trợ, phí kết nối B2B và ngân sách pilot; đặt trần reward 20--30\% doanh thu/ngân sách. \\
+\hline
+Không có thương hiệu thu mua đủ lớn & Cao & Không phụ thuộc brand lớn ngay; bắt đầu bằng 1--2 đối tác nhỏ, đơn hàng nhỏ, có hợp đồng/biên bản xác nhận nhu cầu. \\
+\hline
+Chi phí build/vận hành vượt năng lực sinh viên & Trung bình & MVP dùng web app, API/sandbox BTC, no-code/low-code cho portal ban đầu. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Tầm nhìn phát triển}
+
+Tầm nhìn của OCOP Pay là trở thành lớp hạ tầng AI cho tài chính tuần hoàn địa phương.
+
+\begin{table}[H]
+\centering
+\caption{Hướng phát triển dài hạn}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+\textbf{Hướng phát triển} & \textbf{Nội dung chính} \\
+\hline
+Hệ sinh thái tài chính tuần hoàn & Mở rộng 4 vòng lặp: tiết kiệm của người trẻ, tín dụng có kiểm soát, thu mua B2B, reward cá nhân hóa. Càng nhiều bên tham gia, dữ liệu càng tốt và reward càng hấp dẫn. \\
+\hline
+Tài chính xanh \& ESG & Bắt đầu bằng báo cáo impact cơ bản: nguồn gốc, hộ sản xuất, giá trị thu mua, trạng thái giao hàng, số hộ hưởng lợi. \\
+\hline
+Chuyển đổi số nông nghiệp & Số hóa hồ sơ hộ OCOP, năng lực sản xuất, lịch sử giao hàng, QR truy xuất và đơn hàng dự báo. \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{Lộ trình phát triển 5 năm}
+\begin{tabular}{|p{2cm}|p{4.5cm}|p{7cm}|}
+\hline
+\textbf{Giai đoạn} & \textbf{Mục tiêu} & \textbf{Quy mô khả thi} \\
+\hline
+Năm 1 & MVP và pilot có kiểm soát & 1 ngân hàng/sandbox; 5.000 user; 30--50 hồ sơ OCOP; 5--8 hộ pilot; 1--2 đối tác thu mua. \\
+\hline
+Năm 2 & Pilot thương mại nhỏ & 2--3 đối tác tài chính/ngân hàng; 50.000 user; 100--150 hộ OCOP; 5--10 tỷ VNĐ giá trị thu mua thử nghiệm. \\
+\hline
+Năm 3 & Mở rộng địa phương/ngành hàng & 5--7 địa phương; 300--500 hộ OCOP; 5--10 thương hiệu thu mua; chuẩn hóa QR và báo cáo impact. \\
+\hline
+Năm 4--5 & Nền tảng dữ liệu \& API & Trở thành lớp API/dữ liệu cho ngân hàng, thương hiệu và địa phương; mở rộng sang HTX, làng nghề, nông nghiệp bền vững; scoring vẫn human-in-the-loop. \\
+\hline
+\end{tabular}
+\end{table}
+
+\newpage
+%=========================
+\section*{PHỤ LỤC A: KHẢO SÁT THỰC TẾ -- DỮ LIỆU THÔ \& THỐNG KÊ TÓM TẮT}
+\addcontentsline{toc}{section}{Phụ lục A: Khảo sát thực tế}
+\label{phulucA} 
+%=========================
+
+\subsection*{A.1. Mô tả khảo sát}
+
+\begin{itemize}
+    \item \textbf{Mục đích:} Kiểm chứng giả định về hành vi tiết kiệm, sử dụng app ngân hàng và tiềm năng sản phẩm tài chính tác động xã hội (OCOP Fund).
+    \item \textbf{Đối tượng:} Người trẻ Việt Nam 18--35 tuổi, có sử dụng app ngân hàng số.
+    \item \textbf{Thời gian:} 05/06/2026 -- 10/06/2026 | Hình thức: Google Form (ẩn danh) | Cỡ mẫu: $n = 109$.
+    \item \textbf{Link khảo sát:} \url{https://forms.gle/YMv5jW1j5pqXasRS8}
+    \item \textbf{Link google sheet thống kê:} \url{https://docs.google.com/spreadsheets/d/1pAIRsk_HNATsreahUd9O2m2mcaacCHrYEDOsDE42fXo/edit?usp=sharing}
+\end{itemize}
+
+\subsection*{A.2. Phân bố mẫu theo tuổi và thu nhập}
+
+\begin{table}[H]
+\centering
+\caption{Phân bố mẫu theo tuổi và thu nhập}
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+\textbf{Độ tuổi} & \textbf{Dưới 5tr} & \textbf{5--10tr} & \textbf{10--15tr} & \textbf{15--20tr} & \textbf{Trên 20tr} & \textbf{Tổng} \\
+\hline
+18--22 & 63 & 21 & 0 & 0 & 1 & 85 \\
+\hline
+23--28 & 0 & 4 & 4 & 2 & 0 & 10 \\
+\hline
+29--35 & 0 & 3 & 2 & 5 & 4 & 14 \\
+\hline
+\textbf{Tổng} & 63 & 28 & 6 & 7 & 5 & 109 \\
+\hline
+\end{tabular}
+\end{table}
+
+\textit{Giới tính: Nữ 51,4\% (56), Nam 46,8\% (51). Khu vực: TP.HCM 48,6\%, Hà Nội 29,4\%, khác 22,0\%.}
+
+\subsection*{A.3. Kiểm chứng giả định hành vi}
+
+\begin{table}[H]
+\centering
+\caption{Kiểm chứng giả định hành vi}
+\begin{tabular}{|p{4cm}|p{3cm}|p{2cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Giả định ban đầu} & \textbf{Chỉ số đo lường} & \textbf{Toàn mẫu} & \textbf{Nhóm 23--35} & \textbf{Kết luận} \\
+\hline
+Người trẻ tiết kiệm tùy hứng, không có mục tiêu rõ ràng & Tiết kiệm không hạn mức + chưa tiết kiệm & 68,8\% & 37,5\% & Xác nhận -- nhóm 18--22 nổi bật \\
+\hline
+Voucher/cashback nhận được nhưng không dùng & Dùng dưới 50\% hoặc để hết hạn & 87,3\% & 100\% & Vượt giả định -- cần cá nhân hóa \\
+\hline
+Người dùng không biết tiền tiết kiệm đang đi đâu & Hoàn toàn đồng ý + đồng ý một phần (Câu 15) & 62,4\% & 79,2\% & Xác nhận -- rất sát thực tế \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{A.4. Các chỉ số hành vi quan trọng}
+
+\begin{table}[H]
+\centering
+\caption{Các chỉ số hành vi quan trọng từ khảo sát}
+\begin{tabular}{|p{1cm}|p{5cm}|p{3cm}|p{4cm}|}
+\hline
+\textbf{Câu} & \textbf{Nội dung} & \textbf{Kết quả chính} & \textbf{Ý nghĩa} \\
+\hline
+5 & Số app ngân hàng đang cài & 2--3 app: 80,7\% & Thị trường cạnh tranh đa app, OCOP Fund phải nổi bật để giữ chân \\
+\hline
+8 & Hành vi tiết kiệm định kỳ hàng tháng & Có mục tiêu rõ ràng: 31,2\% & 2/3 người dùng cần công cụ hỗ trợ tạo thói quen tiết kiệm \\
+\hline
+10 & Sử dụng tính năng Goal Saving trên app & Chưa bao giờ: 58,7\% & Khoảng trống UX lớn -- thiết kế Goal Saving cần đơn giản hơn \\
+\hline
+13 & Lý do không dùng voucher (top 3) & Không phù hợp 56,9\% | Điều kiện phức tạp 48,6\% | Quên 42,2\% & Cần cá nhân hóa và nhắc nhở thông minh (AI Gift) \\
+\hline
+16 & Gắn kết hơn nếu biết tiền đang tài trợ dự án cụ thể & Có + có thể: 78,9\% & Impact Transparency là đòn bẩy giữ chân khách hàng hiệu quả \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{A.5. Các chỉ số tiềm năng thị trường OCOP Fund}
+
+\begin{table}[H]
+\centering
+\caption{Các chỉ số tiềm năng thị trường OCOP Fund}
+\begin{tabular}{|p{5cm}|p{2cm}|p{6cm}|}
+\hline
+\textbf{Chỉ số} & \textbf{Tỷ lệ} & \textbf{Ghi chú} \\
+\hline
+Mong muốn voucher được cá nhân hóa (Câu 14) & 84,4\% & Rất + hơi mong muốn. Nền tảng AI Gift có thị trường rõ ràng. \\
+\hline
+Chấp nhận lãi suất thấp hơn để hỗ trợ OCOP (Câu 17) & 77,1\% & Sẵn sàng (17,4\%) + có thể cân nhắc (59,6\%). Nhạy cảm với lãi suất nhưng có thể thuyết phục. \\
+\hline
+Nhận biết OCOP trước khảo sát (Câu 18) & 50,5\% & Biết rõ (22,0\%) + nghe qua (28,4\%). Cần truyền thông tăng nhận biết thương hiệu. \\
+\hline
+Sẵn sàng mở tài khoản OCOP Fund (Câu 19) & 78,0\% & Chắc chắn có (10,1\%) + có thể (67,9\%). TAM rộng, cần loại bỏ rào cản đăng ký. \\
+\hline
+Tỉ lệ \% tiết kiệm dành cho OCOP Fund (Câu 20) & 1--4\%: 59,6\% & Mô hình tích luỹ nhỏ -- đều đặn phù hợp hơn gửi lớn một lần. 5--9\%: 27,5\%. \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{A.6. Nhận xét tổng hợp và hạn chế}
+
+\begin{itemize}
+    \item \textbf{Ưu điểm:} Cỡ mẫu 109, đa dạng vùng miền (TP.HCM, Hà Nội, tỉnh khác), câu hỏi bao phủ toàn bộ hành trình người dùng từ sử dụng app $\rightarrow$ tiết kiệm $\rightarrow$ OCOP Fund.
+    \item \textbf{Hạn chế:} Mẫu lệch về nhóm 18--22 tuổi (77,9\%), chủ yếu tại 2 đô thị lớn -- chưa đại diện hoàn toàn cho tổng thể 18--35 tuổi toàn quốc.
+    \item \textbf{Giá trị sử dụng:} Dữ liệu xác nhận các giả định nền tảng của giải pháp OCOP Pay, củng cố luận điểm về tiềm năng sản phẩm và tâm lý người dùng.
+\end{itemize}
+
+\newpage
+%=========================
+\section*{PHỤ LỤC B: Rà soát thị trường ESG Fintech Việt Nam (tháng 5/2026)}
+\addcontentsline{toc}{section}{Phụ lục B: Rà soát thị trường ESG Fintech}
+\label{phulucB}
+%=========================
+
+Bảng dưới đây rà soát 3 giải pháp ESG Fintech hiện có tại Việt Nam theo 6 tiêu chí kỹ thuật cốt lõi của OCOP Pay. Nguồn: tổng hợp từ trang chủ sản phẩm, báo cáo công bố và phỏng vấn người dùng của nhóm (tháng 5/2026).
+
+\begin{table}[H]
+\centering
+\caption{So sánh OCOP Pay với các giải pháp ESG Fintech hiện có}
+\begin{tabular}{|p{4cm}|p{2cm}|p{2cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Tiêu chí} & \textbf{Finhay ESG} & \textbf{Tnex} & \textbf{KOISIC} & \textbf{OCOP Pay} \\
+\hline
+PO Financing cho hộ sản xuất nhỏ & ✘ & ✘ & ✘ & ✔ \\
+\hline
+Tích hợp trực tiếp ngân hàng số & Một phần (quỹ) & ✔ (Tnex Bank) & ✘ & ✔ \\
+\hline
+AI matching hộ sản xuất $\leftrightarrow$ đơn hàng & ✘ & ✘ & ✘ & ✔ \\
+\hline
+Impact Score cá nhân hóa theo thời gian thực & ✘ & Chỉ carbon offset & ✘ & ✔ \\
+\hline
+Tín dụng gắn với chuỗi cung ứng nông nghiệp & ✘ & ✘ & ✘ & ✔ \\
+\hline
+Mô hình tự cân bằng tài chính (không bù lỗ) & Phí quản lý quỹ & Phí dịch vụ & Donation-based & ✔ \\
+\hline
+\textbf{Số tiêu chí đáp ứng / 6} & \textbf{1/6} & \textbf{2/6} & \textbf{0/6} & \textbf{6/6} \\
+\hline
+\end{tabular}
+\end{table}
+
+\textit{Ghi chú: ✔ = đáp ứng đầy đủ; ✘ = không đáp ứng; ``Một phần'' / ``Chỉ carbon offset'' = đáp ứng một phần giới hạn. Nguồn thông tin: finhay.com.vn, tnex.com.vn, koisic.com (truy cập tháng 5/2026) và khảo sát người dùng thực tế của nhóm.}
+
+\end{document}
